@@ -12,7 +12,6 @@ const firebaseConfig = {
     measurementId: "G-DXDEK1FKYV",
     databaseURL: "https://survey-portal-3b2b0-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
-console.log(firebaseConfig)
 
 // export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp()
 // export const auth = getAuth(app)

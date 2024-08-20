@@ -1,6 +1,6 @@
 "use client"
 
-import { auth, GoogleAuthProvider, signInWithPopup } from '@/app/firebase/confing';
+import { auth, GoogleAuthProvider, signInWithPopup } from '@/firebase/confing';
 
 const Auth = () => {
   const signInWithGoogle = async () => {
@@ -23,6 +23,5 @@ const Auth = () => {
     </div>
   );
 };
-      // The signed-in user info.
 
 export default Auth;
