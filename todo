@@ -1,3 +1,5 @@
 1.Find solution -The admin manually removing access for the users.✔️
 2.Pending - Architecture of /survey/getQuestions.✔️
 3.Feature - JWT for maintaining session.
+4.Show error in UI if the gmail account is not @iitj.ac.in✔️
+5.FIX - Removed lint check in ./firebase and done some weird changes in firebase.json.

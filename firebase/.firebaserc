@@ -1,5 +1,12 @@
 {
   "projects": {
     "default": "survey-portal-3b2b0"
-  }
+  },
+  "targets": {},
+  "etags": {
+    "survey-portal-3b2b0": {
+      "extensionInstances": {}
+    }
+  },
+  "dataconnectEmulatorConfig": {}
 }
