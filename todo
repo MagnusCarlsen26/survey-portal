@@ -3,3 +3,4 @@
 3.Feature - JWT for maintaining session.
 4.Show error in UI if the gmail account is not @iitj.ac.in✔️
 5.FIX - Removed lint check in ./firebase and done some weird changes in firebase.json.
+6.FIX - onUserSignup function is in V1. Move it to V2.
