@@ -1,13 +1,15 @@
 import {onRequest} from "firebase-functions/v2/https";
 import functions from 'firebase-functions'
 import admin from 'firebase-admin'
+import cors from 'cors'
 import {
     beforeUserCreated,
     beforeUserSignedIn,
 } from "firebase-functions/v2/identity";
-  
+
 admin.initializeApp();
 const db = admin.firestore();
+const corsHandler = cors({origin : true})
 
 export const beforecreated = beforeUserCreated((event) => {
     const user = event.data;
@@ -17,7 +19,7 @@ export const beforecreated = beforeUserCreated((event) => {
     }
 });
 
-export const onUserSignup = functions.auth.user().onCreate(async(user) => {
+export const onUserSignup = functions.auth.user().onCreate({ cors : true },async(user) => {
   const email = user.email;
   const uuid = user.uid;
   const name = user.displayName
@@ -43,7 +45,7 @@ export const beforesignedin = beforeUserSignedIn((event) => {
     }
 });
 
-export const isAccess = onRequest(async(req,res) => {
+export const isAccess = onRequest({ cors : true },async(req,res) => {
   const uuid = req.query.uuid
   try {
     const docRef = db.collection('users').doc(uuid);
@@ -55,11 +57,10 @@ export const isAccess = onRequest(async(req,res) => {
     //   res.status(404).send("No such document!");
     // }
   } catch (error) {
-    res.status(500).send(error,uuid)
+    res.status(500).send({error,req : req.query})
   }
-}) 
+});
 
-export const helloWorld = onRequest((req, res) => {
-
-    res.send("Hello from Firebase!");
+export const helloWorld = onRequest({cors : true},(req, res) => {
+      res.status(200).send({"status" : "success","data" : "some... data"})
 });
