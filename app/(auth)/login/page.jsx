@@ -21,11 +21,14 @@ const Auth = () => {
     };
 
     return (
-        <div>
-            <button onClick={signInWithGoogle}>Sign Up with google</button>
-            <p>{err}</p>
+        <div className="flex flex-col items-center justify-center min-h-screen">
+            <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={signInWithGoogle}>
+                Sign Up with Google
+            </button>
+            <p className="mt-2 text-red-500">{err}</p>
         </div>
     );
+    
 };
 
 export default Auth;

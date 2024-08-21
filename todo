@@ -4,3 +4,8 @@
 4.Show error in UI if the gmail account is not @iitj.ac.in✔️
 5.FIX - Removed lint check in ./firebase and done some weird changes in firebase.json.
 6.FIX - onUserSignup function is in V1. Move it to V2.
+7.For dev purpose, firebase rules are all read and write for anyone.
+8.Come with an algorithm to detect mindless answering of questions.
+
+
+remove repeated reviews.
