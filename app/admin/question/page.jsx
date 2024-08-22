@@ -82,20 +82,19 @@ const Question = () => {
 
     const handleClick = async () => {
         try {
-        console.log('Fetching function')
-        const callFunction = httpsCallable(functions, 'isAccess');
-        const result = await callFunction({uuid : '3NL6sW6FIObE7Q0O75jJMQrIfzI2'});
-          console.log(result); // Should output: "Hello from Firebase!"
+            const result = await httpsCallable(functions, 'isAdminAccess')({uuid : 'tb0GBAAlERPZXf9t638ZQMC30hW2',option : "setQuestion",
+                payload : { uuid : 'uuid' , page : "4"}
+            });
         } catch (error) {
-          console.error('Error calling function:', error);
+            console.error('Error calling function:', error);
         }
-      };
+    };
     
-      return (
+    return (
         <div>
-          <button onClick={handleClick}>Call Cloud Function</button>
+            <button onClick={handleClick}>Call Cloud Function</button>
         </div>
-      );
+    );
 }
 
 export default Question
