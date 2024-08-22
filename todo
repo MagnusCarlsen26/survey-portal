@@ -7,5 +7,6 @@
 7.For dev purpose, firebase rules are all read and write for anyone.
 8.Come with an algorithm to detect mindless answering of questions.
 9. FIX - saving uuid in localstorage for now.
-
-remove repeated reviews.
+10. DC - remove repeated reviews.
+11. FIX - use formick in admin.question
+12. ADD - option to add pfp in admin/questions
