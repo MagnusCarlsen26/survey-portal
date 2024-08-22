@@ -84,7 +84,7 @@ const Question = () => {
         try {
         console.log('Fetching function')
         const callFunction = httpsCallable(functions, 'isAccess');
-        const result = await callFunction({uuid : 'rtyhgu'});
+        const result = await callFunction({uuid : '3NL6sW6FIObE7Q0O75jJMQrIfzI2'});
           console.log(result); // Should output: "Hello from Firebase!"
         } catch (error) {
           console.error('Error calling function:', error);

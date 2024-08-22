@@ -1,11 +1,19 @@
 import {onRequest} from "firebase-functions/v2/https";
-import functions from 'firebase-functions'
+import functions, { logger } from 'firebase-functions'
 import admin from 'firebase-admin'
 import cors from 'cors'
 import {
     beforeUserCreated,
     beforeUserSignedIn,
 } from "firebase-functions/v2/identity";
+import {
+  log,
+  info,
+  debug,
+  warn,
+  error,
+  write,
+} from "firebase-functions/logger"
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -46,18 +54,20 @@ export const beforesignedin = beforeUserSignedIn((event) => {
 });
 
 export const isAccess = onRequest({ cors : true },async(req,res) => {
-  const uuid = req.query.uuid
+  const uuid = req.body.data.uuid
+  logger.log(uuid)
   try {
     const docRef = db.collection('users').doc(uuid);
     const docSnap = await docRef.get();
-    res.send(docSnap.data())
+    res.status(200).send({"datas" : docSnap.data(),hi:"hi","status" : "success","data" : "some... data"})
     // if (docSnap.exists) {
     //   res.status(200).send("Document data:", docSnap.data());
     // } else {
     //   res.status(404).send("No such document!");
     // }
   } catch (error) {
-    res.status(500).send({error,req : req.query})
+    logger.error(error)
+    res.status(500).send({error,req : req.query,data : "data"})
   }
 });
 

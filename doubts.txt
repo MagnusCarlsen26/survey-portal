@@ -1,3 +1,5 @@
 1. How will you select randomness?
 2. Should I put a timer of like 10 secs for each question?
 3. Form??
+4. Cost . 
+5. Scrape doctors pfp
