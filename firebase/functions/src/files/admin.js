@@ -1,12 +1,68 @@
 import {onRequest} from "firebase-functions/v2/https";
 import { db } from './../config.js'
 import { logger } from "firebase-functions";
-import { stat } from "fs";
 
-function listAccess() {
+
+async function listAccess() {
     try {
-        return "listAccess"
-    } catch(error) {
+        const accessUsersSnapshot = await db.collection('users').where("isAccess", "==", true).get();
+        const accessUsers = accessUsersSnapshot.docs.map(doc => doc.data());
+        
+        return accessUsers;
+    } catch (error) {
+        logger.error(error);
+        return false;
+    }
+}
+
+async function grantAccess({ emails }) {
+    try {
+        emails.forEach( async(email) => {
+            logger.info(email)
+            await db.runTransaction( async(t) => {
+                let userSnapshot = await db.collection('users').where("email", "==", email).get();
+
+                let userUuid;
+                if (!userSnapshot.empty) {
+                    userSnapshot.forEach(doc => {
+                        userUuid = doc.data().uuid;
+                    });
+                    logger.info(userUuid);
+                } else {
+                    logger.info("No user found with the given email.");
+                }
+                t.update(db.collection("users").doc(userUuid), {isAccess : true} )
+            })
+        } )
+        return "Granted access"
+    } catch (error) {
+        logger.error(error)
+        return false
+    }
+}
+
+async function removeAccess({ emails }) {
+    try {
+        emails.forEach( async(email) => {
+            logger.info(email)
+            await db.runTransaction( async(t) => {
+                let userSnapshot = await db.collection('users').where("email", "==", email).get();
+
+                let userUuid;
+                if (!userSnapshot.empty) {
+                    userSnapshot.forEach(doc => {
+                        userUuid = doc.data().uuid;
+                    });
+                    logger.info(userUuid);
+                } else {
+                    logger.info("No user found with the given email.");
+                }
+                t.update(db.collection("users").doc(userUuid), {isAccess : false} )
+            })
+        } )
+        return "Removed access"
+    } catch (error) {
+        logger.error(error)
         return false
     }
 }
@@ -38,7 +94,7 @@ export const isAdminAccess = onRequest({ cors : true },async(req,res) => {
     const uuid = req.body.data.uuid
     const option = req.body.data.option
     const payload = req.body.data.payload
-    try {
+    try {   
         const userSnapshot = await db.collection('users').doc(uuid).get();
         if (userSnapshot.exists) {
             const admin = await db.collection('admins').where("email","=",userSnapshot.data().email).get()
@@ -60,9 +116,12 @@ export const isAdminAccess = onRequest({ cors : true },async(req,res) => {
         }
         let result;
         if ( option === 'response' ) result = response(payload)
-        else if ( option === 'listAccess' ) result = listAccess(payload)
         else if ( option === 'setQuestion' ) result = await setQuestion(payload)
+        else if ( option === 'listAccess' ) result = await listAccess(payload)
+        else if ( option === 'grantAccess' ) result = await grantAccess(payload)
+        else if ( option === 'removeAccess' ) result = await removeAccess(payload)
         
+        logger.info(result)
         if (result) {
             res.status(200).send({
                 status : "success",

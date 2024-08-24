@@ -8,5 +8,15 @@
 8.Come with an algorithm to detect mindless answering of questions.
 9. FIX - saving uuid in localstorage for now.
 10. DC - remove repeated reviews.
-11. FIX - use formick in admin.question
-12. ADD - option to add pfp in admin/questions
+11. FIX - use formick in admin/question.
+12. ADD - option to add pfp in admin/questions.
+13. Who made the question in admin/questions.
+14. Catch error in client when making API calls.
+15. BUG - Sending 200 status for unauthorized users. make it 401
+16. FEATURE - Extract indiviual questions from questions DB.
+17. FEATURE - Validate the question when admin sets it.
+18. ADD - Show Error to User in admin/questions while saving to DB.
+19. ADD - Allow admin to allow other email domains.
+20. SECURITY - Alert in admin/access.
+21. BUG - FIX expansion of loading buttons.
+22. FEATURE - Edit/DELETE feature in admin/access
