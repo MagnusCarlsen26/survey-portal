@@ -1,10 +1,10 @@
 "use client"
+
 import { db,functions } from '@/firebase/confing'
 import { httpsCallable } from 'firebase/functions';
 import { useState } from 'react';
 
 function InputField({text,onChange,value}) {
-    console.log(value)
     return (
         <div className="w-72 p-2">
             <div className="relative w-full min-w-[200px] h-10">
@@ -33,13 +33,12 @@ function DoctorCard({ doctor, id, setCurrDoctor, doctors, setIsEdit }) {
                 </div>
             </div>
             <div className="button-container flex flex-col">
-                <button className="button-4">Book a visit now</button>
                 <br/>
                 <button 
                     className="button-4"
                     onClick={() => {
                         setCurrDoctor(prev => doctors[id])
-                        setIsEdit(prev => false)
+                        setIsEdit(prev => id + 1)
                     }}
                 >
                     Edit
@@ -52,17 +51,53 @@ function DoctorCard({ doctor, id, setCurrDoctor, doctors, setIsEdit }) {
 
 const Question = () => {
 
-    const handleClick = async () => {
+    const saveToDB = async () => {
+        let result
         try {
-            const result = await httpsCallable(functions, 'isAdminAccess')({uuid : 'tb0GBAAlERPZXf9t638ZQMC30hW2',option : "setQuestion",
-                payload : { uuid : 'uuid' , page : "4"}
+            setIsSaving(prev => true)
+            result = await httpsCallable(functions, 'isAdminAccess')({
+                uuid : 'tt',
+                option : "setQuestion",
+                payload : { 
+                    page : page,
+                    doctors
+                }
             });
         } catch (error) {
-            console.error('Error calling function:', error);
+            console.log(result)
+            setError(JSON.stringify(result))
         }
+        setIsSaving(prev => false)
+
     };
 
+    const saveDoctor = () => {
+        console.log(isEdit)
+        if (isEdit) {
+            setDoctors( prev => {
+                let newDoc = [...prev]
+                newDoc[isEdit - 1] = currDoctor
+                console.log(newDoc,'isWEdir')
+                return newDoc
+            })
+        } else {
+            setDoctors( prev => [...prev,currDoctor] )
+        }
+        setIsEdit(false)
+        setCurrDoctor({
+            name: '',
+            experience: '',
+            consultationFees: '',
+            distance: '',
+            rating: '',
+            ratingsCount: ''
+        }); 
+    }
+
+    const [isSaving,setIsSaving] = useState(false)
+    const [error,setError] = useState("")
     const [doctors,setDoctors] = useState([])
+    const [page,SetPage] = useState()
     const [isEdit,setIsEdit] = useState(false)
     const [currDoctor,setCurrDoctor] = useState({
         name: '',
@@ -91,29 +126,48 @@ const Question = () => {
                 </div>
             </div>
             <div className='flex flex-col items-center'>
-                <InputField value={currDoctor.name} text={"Doctor's Name"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, name : text })} ) }}/>
-                <InputField value={currDoctor.experience} text={"Years of Experience"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, experience : text })} ) }}/>
-                <InputField value={currDoctor.consultationFees} text={"Consultation fees"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, consultationFees : text })} ) }}/>
-                <InputField value={currDoctor.distance} text={"Distance"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, distance : text })} ) }}/>
-                <InputField value={currDoctor.rating} text={"Rating"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, rating : text })} ) }}/>
-                <InputField value={currDoctor.ratingsCount} text={"No. of ratings"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, ratingsCount : text })} ) }}/>
-                <button 
-                    onClick={() => { 
-                        setDoctors( prev => [...prev,currDoctor] )
-                        setCurrDoctor({
-                            name: '',
-                            experience: '',
-                            consultationFees: '',
-                            distance: '',
-                            rating: '',
-                            ratingsCount: ''
-                        }); 
-                    }}
-                    type="button" 
-                    className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-                >
-                    Purple to Blue
-                </button>
+                {
+                    doctors.length <6 ?
+                    <>
+                        <InputField value={currDoctor.name} text={"Doctor's Name"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, name : text })} ) }}/>
+                        <InputField value={currDoctor.experience} text={"Years of Experience"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, experience : text })} ) }}/>
+                        <InputField value={currDoctor.consultationFees} text={"Consultation fees"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, consultationFees : text })} ) }}/>
+                        <InputField value={currDoctor.distance} text={"Distance"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, distance : text })} ) }}/>
+                        <InputField value={currDoctor.rating} text={"Rating"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, rating : text })} ) }}/>
+                        <InputField value={currDoctor.ratingsCount} text={"No. of ratings"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, ratingsCount : text })} ) }}/>
+                    
+                
+                        <button 
+                            onClick={saveDoctor}
+                            type="button" 
+                            className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                        >
+                            Save Doctor
+                        </button>
+                    </>
+                    : ""
+                }
+                <br/>
+                {
+                    doctors.length === 6 ?
+                    !isSaving ? <>
+                        <InputField text={"Page"} onChange={SetPage} value={page}/>
+                        <button 
+                            onClick={saveToDB}
+                            className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"
+                        >
+                            <span className="relative px-24 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">Save to DB</span>
+                        </button>
+                    </> : 
+                    <button type="button" className="py-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg max-w-md">
+                        <svg width="20" height="20" fill="currentColor" className="mr-2 animate-spin" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z"></path>
+                        </svg>
+                        Saving to DB
+                    </button> 
+                    : ""
+                }
+            {error}
             </div>
         </>
     );
