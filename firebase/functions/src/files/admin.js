@@ -1,7 +1,7 @@
 import {onRequest} from "firebase-functions/v2/https";
 import { db } from './../config.js'
 import { logger } from "firebase-functions";
-
+import { v4 as uuidv4 } from 'uuid';
 
 async function listAccess() {
     try {
@@ -11,7 +11,7 @@ async function listAccess() {
         return accessUsers;
     } catch (error) {
         logger.error(error);
-        return false;
+        return error;
     }
 }
 
@@ -37,7 +37,7 @@ async function grantAccess({ emails }) {
         return "Granted access"
     } catch (error) {
         logger.error(error)
-        return false
+        return error
     }
 }
 
@@ -63,7 +63,7 @@ async function removeAccess({ emails }) {
         return "Removed access"
     } catch (error) {
         logger.error(error)
-        return false
+        return error
     }
 }
 
@@ -71,13 +71,17 @@ function response() {
     try {
         return "response"
     } catch (error) {
-        return false
+        return error
     }
 }
 
 async function setQuestion({ page, doctors }) {;
     logger.info(page)
     try {
+        doctors = doctors.map( doctor => ({
+            ...doctor,
+            id : uuidv4()
+        }) )
         const doctorsRef = db.collection('questions').doc(page)
         await doctorsRef.set({
             doctors
@@ -86,7 +90,7 @@ async function setQuestion({ page, doctors }) {;
         return 'Done'
     } catch (error) {
         logger.error("Error saving doctors list:", error);
-        return false
+        return error
     }
 }
 

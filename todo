@@ -3,15 +3,15 @@
 3.Feature - JWT for maintaining session.
 4.Show error in UI if the gmail account is not @iitj.ac.in✔️
 5.FIX - Removed lint check in ./firebase and done some weird changes in firebase.json.
-6.FIX - onUserSignup function is in V1. Move it to V2.
-7.For dev purpose, firebase rules are all read and write for anyone.
+6. FIX - onUserSignup function is in V1. Move it to V2.
+7. For dev purpose, firebase rules are all read and write for anyone.
 8.Come with an algorithm to detect mindless answering of questions.
 9. FIX - saving uuid in localstorage for now.
 10. DC - remove repeated reviews.
 11. FIX - use formick in admin/question.
 12. ADD - option to add pfp in admin/questions.
-13. Who made the question in admin/questions.
-14. Catch error in client when making API calls.
+13. FEATURE - Who made the question in admin/questions.
+14. FIX - Catch error in client when making API calls.
 15. BUG - Sending 200 status for unauthorized users. make it 401
 16. FEATURE - Extract indiviual questions from questions DB.
 17. FEATURE - Validate the question when admin sets it.
@@ -19,4 +19,6 @@
 19. ADD - Allow admin to allow other email domains.
 20. SECURITY - Alert in admin/access.
 21. BUG - FIX expansion of loading buttons.
-22. FEATURE - Edit/DELETE feature in admin/access
+22. FEATURE - Edit/DELETE feature in admin/access.
+23. FEATURE - Skeleton UI in /survey.
+24. CHECK - Testing isAccess function.
