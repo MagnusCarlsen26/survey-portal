@@ -1,8 +1,7 @@
 import {onRequest} from "firebase-functions/v2/https";
 import { db } from './../config.js'
 import { logger } from "firebase-functions";
-import { collection, query, getDocs } from "firebase/firestore";
-
+    
 async function response({ uuid, qid, responseId }) {
     try {
         if (!await checkPrevResponse({ uuid, page : qid })) return "Please submit response for previous quesitons first."     
@@ -52,8 +51,15 @@ async function checkPrevResponse({ uuid,page }) {
     }
 }
 
-function done({ uuid }) {
+async function done({ uuid, form }) {
     try {
+        if (!await checkPrevResponse({ uuid, page : 13 })) return "Please answer all the questions."
+
+        await db.collection('done').add({
+            uuid,
+            form,
+            cat : Date.now()
+        })
         return "done"
     } catch(error) {
         return error

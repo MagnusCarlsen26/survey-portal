@@ -18,7 +18,7 @@ const DoctorCard = ({ doctor }) => {
                 payload : { 
                     uuid,
                     qid : page,
-                    respo : doctor.id
+                    responseId : doctor.id
                 }
             });
         } catch (error) {

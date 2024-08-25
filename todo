@@ -8,7 +8,7 @@
 8.Come with an algorithm to detect mindless answering of questions.
 9. FIX - saving uuid in localstorage for now.
 10. DC - remove repeated reviews.
-11. FIX - use formick in admin/question.
+11. FIX - use formick in admin/question and survey/doneadm.
 12. ADD - option to add pfp in admin/questions.
 13. FEATURE - Who made the question in admin/questions.
 14. FIX - Catch error in client when making API calls.
@@ -23,3 +23,5 @@
 23. FEATURE - Skeleton UI in /survey.
 24. CHECK - Testing isAccess function.
 25. ADD - meta tag for each page.
+26. ADD - Optimize for SSR.
+27. FIX - Duplicate records in DB
