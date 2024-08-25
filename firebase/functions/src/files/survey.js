@@ -3,13 +3,13 @@ import { db } from './../config.js'
 import { logger } from "firebase-functions";
 import { collection, query, getDocs } from "firebase/firestore";
 
-async function response({ uuid, qid, respo }) {
+async function response({ uuid, qid, responseId }) {
     try {
-        if (!checkPrevResponse({ uuid, page : qid })) return "Please submit response for previous quesitons first."     
+        if (!await checkPrevResponse({ uuid, page : qid })) return "Please submit response for previous quesitons first."     
         await db.collection('response').add({
             uuid,
             qid,
-            respo
+            responseId
         })
         return "response"
     } catch (error) {
@@ -30,23 +30,22 @@ async function getQuestion({ uuid, page }) {
 
 async function checkPrevResponse({ uuid,page }) {
     try {
+        page = page.toString()
         for( let qid = 1; qid<page; qid++ ) {
-            const q = query(
-                collection(db,'response'),
-                where('uuid','==',uuid),
-                where('qid','==',qid)
-            )
-            const docs = await getDocs(q)
-            logger.log(docs)
-            if (docs.length) {
-                logger.log('ok responded')
+            logger.info(`Checking for ${uuid},${qid}`)
+            const query = await db.collection('response')
+                .where('uuid','==',uuid)
+                .where('qid','==',qid.toString())
+                .get()
+            logger.info(`Statue : ${query.empty}`)
+            if (query.empty) {
+                return false
             } else {
-                logger.log('not responded')
             }
         }
-        return false
+        return true
     } catch (error) {
-        logger.error(error)
+        logger.error('Error in checkPrevResponse',error)
         return false
     }
 }
@@ -65,9 +64,7 @@ export const isAccess = onRequest({ cors : true },async(req,res) => {
     const payload = req.body.data.payload
     try {
         const userSnapShot = await db.collection('users').doc(uuid).get();
-        logger.info(userSnapShot)
         if (userSnapShot.exists) {
-            console.log(userSnapShot.data())
             if (!userSnapShot.data().isAccess) {
                 res.status(401).send({
                     status : 'UNAUTHENTICATED',
@@ -87,7 +84,6 @@ export const isAccess = onRequest({ cors : true },async(req,res) => {
         else if ( option === 'getQuestion' ) result = await getQuestion(payload)
         else if ( option === 'done' ) result = await done(payload)
         
-        logger.info(result)
         if (result) {
             res.status(200).send({
                 status : "success",
