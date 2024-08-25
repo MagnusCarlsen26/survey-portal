@@ -9,7 +9,8 @@ async function response({ uuid, qid, responseId }) {
         await db.collection('response').add({
             uuid,
             qid,
-            responseId
+            responseId,
+            cat : Date.now()
         })
         return "response"
     } catch (error) {
