@@ -82,7 +82,11 @@ const Survey = ({ params }) => {
                         page,
                     }
                 })
-                setDoctors(prev => response.data.doctors)
+                if (response.data === 'Please attempt previous questions first.') {
+                    console.error('Please attempt previous questions first.')
+                } else {
+                    setDoctors(prev => response.data.doctors)
+                }
                 console.log(doctors)
             } catch(error) {
                 

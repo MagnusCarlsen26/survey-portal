@@ -21,6 +21,7 @@ async function response({ uuid, qid, responseId }) {
 
 async function getQuestion({ uuid, page }) {
     try {
+        if (!await checkPrevResponse({ uuid,page })) return "Please attempt previous questions first."
         const question =  await db.collection('questions').doc(page).get()
         return question.data()
     }  catch (error) {
