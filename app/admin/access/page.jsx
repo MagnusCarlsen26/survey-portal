@@ -3,7 +3,7 @@
 import { httpsCallable } from 'firebase/functions';
 import { db,functions } from '@/firebase/confing'
 import { useState } from 'react';
-import { Cabin_Sketch } from 'next/font/google';
+import { TiTick } from "react-icons/ti";
 
 function Fetching () {
     return (
@@ -65,56 +65,87 @@ const Access = () => {
         grantAccess : false,
         removeAccess : false
     })
-    const [emails,setEmails] = useState([])
-    const [currEmail,setCurrEmail] = useState("")
-    const uuid = 'vCdlvr35rSd0ssazKB07znppJju1'
-    console.log(emails)
-    console.log(currEmail)
+    const [grantEmails,setGrantEmails] = useState([])
+    const [removeEmails,setRemoveEmails] = useState([])
+    const [grantCurrEmail,setGrantCurrEmail] = useState("")
+    const [removeCurrEmail,setRemoveCurrEmail] = useState("")
+    const uuid = localStorage.getItem('userUuid')
+
     return (
-        <div className="flex items-center justify-center h-full">
-            <Button 
-                loadingState={loadingState}
-                option={'listAccess'}
-                onClick={() => handle(setLoadingState,uuid,'listAccess',{})}
-            />
-            <div>
-                <div>
-                    {
-                        emails.map( (email,index) => (
-                            <div className='flex' id={index}>
-                                <p>{email}@iitj.ac.in</p>
-                            </div>
-                        ))
-                    }
-                </div>
-                <div className='flex'>
-                    <InputField 
-                        text={'Email'} 
-                        onChange={setCurrEmail}
-                        value={currEmail}
-                    />
-                    <button 
-                        onClick={() => {
-                            if (currEmail.length) {
-                                setEmails(prev => [...prev,`${currEmail}@iitj.ac.in`]),
-                                setCurrEmail("")
-                            }
-                        }}
-                    >
-                        S
-                    </button>
-                </div>
+        <div className="bg-gray-900 bg-cover bg-no-repeat h-full" style={{backgroundImage : 'url("https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80")'}}>
+            <div className="flex items-center justify-between h-full p-16">
                 <Button 
                     loadingState={loadingState}
-                    option={'grantAccess'}
-                    onClick={() => handle(setLoadingState,uuid,'grantAccess',{emails})}
+                    option={'listAccess'}
+                    onClick={() => handle(setLoadingState,uuid,'listAccess',{})}
                 />
+                <div>
+                    <div>
+                        {
+                            grantEmails.map( (email,index) => (
+                                <div className='flex' id={index}>
+                                    <p>{email}</p>
+                                </div>
+                            ))
+                        }
+                    </div>
+                    <div className='flex'>
+                        <InputField 
+                            text={'Email'} 
+                            onChange={setGrantCurrEmail}
+                            value={grantCurrEmail}
+                        />
+                        <button 
+                            onClick={() => {
+                                if (grantCurrEmail.length) {
+                                    setGrantEmails(prev => [...prev,`${grantCurrEmail}@iitj.ac.in`]),
+                                    setGrantCurrEmail("")
+                                }
+                            }}
+                        >
+                            <TiTick />
+                        </button>
+                    </div>
+                    <Button 
+                        loadingState={loadingState}
+                        option={'grantAccess'}
+                        onClick={() => handle(setLoadingState,uuid,'grantAccess',{emails : grantEmails})}
+                    />
+                </div>
+                <div>
+                    <div>
+                        {
+                            removeEmails.map( (email,index) => (
+                                <div className='flex' id={index}>
+                                    <p>{email}</p>
+                                </div>
+                            ))
+                        }
+                    </div>
+                    <div className='flex'>
+                        <InputField 
+                            text={'Email'} 
+                            onChange={setRemoveCurrEmail}
+                            value={removeCurrEmail}
+                        />
+                        <button 
+                            onClick={() => {
+                                if (removeCurrEmail.length) {
+                                    setRemoveEmails(prev => [...prev,`${removeCurrEmail}@iitj.ac.in`]),
+                                    setRemoveCurrEmail("")
+                                }
+                            }}
+                        >
+                            <TiTick />
+                        </button>
+                    </div>
+                    <Button 
+                        loadingState={loadingState}
+                        option={'removeAccess'}
+                        onClick={() => handle(setLoadingState,uuid,'removeAccess',{emails : removeEmails})}
+                    />
+                </div>
             </div>
-            <Button 
-                loadingState={loadingState}
-                option={'removeAccess'}
-                onClick={() => handle(setLoadingState,uuid,'removeAccess',{emails})}
-            />
         </div>
     )
 }

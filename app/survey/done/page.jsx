@@ -3,16 +3,16 @@
 import { useState } from "react"
 import { httpsCallable } from 'firebase/functions';
 import { db,functions } from '@/firebase/confing'
-
+    
 function InputField({text,setForm,keyy}) {
     return (
         <div className="w-full max-w-sm min-w-[200px] mt-4">
-            <label className="block mb-1 text-sm text-slate-800">
+            <label className="block mb-1 text-sm text-slate-800 font-bold">
                 {text}
             </label>
             <input
                 type="text"
-                className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+                className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md border-black border-2"
                 onChange={(e) => setForm( prev => ({
                     ...prev,
                     [keyy] : e.target.value
@@ -81,37 +81,41 @@ const Done = () => {
     const uuid = 'tb0GBAAlERPZXf9t638ZQMC30hW2'
     
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen">
-            <InputField 
-                text={'Question 1'}
-                setForm={setForm}
-                keyy={'q1'}
-            />
-            <InputField 
-                text={'Question 2'}
-                setForm={setForm}
-                keyy={'q2'}
-            />
-            <InputField 
-                text={'Question 3'}
-                setForm={setForm}
-                keyy={'q3'}
-            />
-            <InputField 
-                text={'Question 4'}
-                setForm={setForm}
-                keyy={'q4'}
-            />
-            <InputField 
-                text={'Question 5'}
-                setForm={setForm}
-                keyy={'q5'}
-            />
-            <Button 
-                loadingState={loadingState}
-                option={"Submit Survey"}
-                onClick={() => {handle(setLoadingState,uuid,form)}}
-            />
+        <div className="flex h-screen w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat" style={{backgroundImage : 'url("https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80")'}}>
+
+            <div className="flex flex-col items-center justify-center min-h-screen">
+                <InputField 
+                    text={'Question 1'}
+                    setForm={setForm}
+                    keyy={'q1'}
+                />
+                <InputField 
+                    text={'Question 2'}
+                    setForm={setForm}
+                    keyy={'q2'}
+                />
+                <InputField 
+                    text={'Question 3'}
+                    setForm={setForm}
+                    keyy={'q3'}
+                />
+                <InputField 
+                    text={'Question 4'}
+                    setForm={setForm}
+                    keyy={'q4'}
+                />
+                <InputField 
+                    text={'Question 5'}
+                    setForm={setForm}
+                    keyy={'q5'}
+                />
+                <br />
+                <Button 
+                    loadingState={loadingState}
+                    option={"Submit Survey"}
+                    onClick={() => {handle(setLoadingState,uuid,form)}}
+                />
+            </div>
         </div>
     )
 }
