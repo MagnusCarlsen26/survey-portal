@@ -94,6 +94,15 @@ async function setQuestion({ page, doctors }) {;
     }
 }
 
+async function download({  }) {
+    try {
+        
+    } catch(error) {    
+        logger.error(error)
+        return error
+    }
+}
+
 export const isAdminAccess = onRequest({ cors : true },async(req,res) => {
     const uuid = req.body.data.uuid
     const option = req.body.data.option
@@ -124,7 +133,8 @@ export const isAdminAccess = onRequest({ cors : true },async(req,res) => {
         else if ( option === 'listAccess' ) result = await listAccess(payload)
         else if ( option === 'grantAccess' ) result = await grantAccess(payload)
         else if ( option === 'removeAccess' ) result = await removeAccess(payload)
-        
+        else if ( option === 'download' ) result = await download(payload)
+
         logger.info(result)
         if (result) {
             res.status(200).send({
