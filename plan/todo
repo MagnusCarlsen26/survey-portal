@@ -21,7 +21,7 @@
 21. BUG - FIX expansion of loading buttons.
 22. FEATURE - Edit/DELETE feature in admin/access.
 23. FEATURE - Skeleton UI in /survey.
-24. CHECK - Testing isAccess function.
+24. CHECK - Testing isAccess function.✔️
 25. ADD - meta tag for each page.
 26. ADD - Optimize for SSR.
 27. FIX - Duplicate records in DB.

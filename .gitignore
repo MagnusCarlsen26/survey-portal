@@ -36,3 +36,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+firebase/appConfig.json
+firebase/backup.json
+firebase/downloadDb/appConfig.json
+firebase/downloadDb/backup.json
