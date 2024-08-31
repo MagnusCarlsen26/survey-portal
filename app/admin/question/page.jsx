@@ -2,7 +2,7 @@
 
 import { db,functions } from '@/firebase/confing'
 import { httpsCallable } from 'firebase/functions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function InputField({text,onChange,value}) {
     return (
@@ -19,17 +19,15 @@ function DoctorCard({ doctor, id, setCurrDoctor, doctors, setIsEdit }) {
     return (
         <div className="card">
             <div className="image-container">
-                <img className="image" src={doctor.image} alt={doctor.name} width="120" height="120" loading="lazy" />
+                <img className="image" src={doctor.pfp} alt={doctor.name} width="120" height="120" loading="lazy" />
             </div>
             <div className="info-container">
                 <h3>{doctor.name}</h3>
                 <span className="biggerSpan">{doctor.specialty}</span><br />
                 <span>{doctor.experience} years of experience</span><br />
                 <span> ₹{doctor.consultationFees} Consultation fees</span><br />
-                <span>{doctor.distance} kms from me</span><br />
                 <div className="rating-widget">
-                    <div className="rating">{doctor.rating}</div>
-                    <span className="biggerSpan">{doctor.ratingsCount} ratings provided</span>
+                    <div className="rating">{doctor.rating}⭐</div>
                 </div>
             </div>
             <div className="button-container flex flex-col">
@@ -51,12 +49,13 @@ function DoctorCard({ doctor, id, setCurrDoctor, doctors, setIsEdit }) {
 
 const Question = () => {
 
-    const saveToDB = async () => {
+    const saveToDB = async (uuid) => {
         let result
         try {
+            console.log('saving')
             setIsSaving(prev => true)
             result = await httpsCallable(functions, 'isAdminAccess')({
-                uuid : 'tt',
+                uuid ,
                 option : "setQuestion",
                 payload : { 
                     page : page,
@@ -77,7 +76,6 @@ const Question = () => {
             setDoctors( prev => {
                 let newDoc = [...prev]
                 newDoc[isEdit - 1] = currDoctor
-                console.log(newDoc,'isWEdir')
                 return newDoc
             })
         } else {
@@ -85,12 +83,11 @@ const Question = () => {
         }
         setIsEdit(false)
         setCurrDoctor({
+            id : '',
             name: '',
             experience: '',
             consultationFees: '',
-            distance: '',
             rating: '',
-            ratingsCount: ''
         }); 
     }
 
@@ -105,11 +102,31 @@ const Question = () => {
         consultationFees: '',
         distance: '',
         rating: '',
-        ratingsCount: ''
+        id : '',
+        pfp : "",
     }); 
+    const [uuid,setUuid] = useState("")
 
+    useEffect( () => {
+        setUuid( localStorage.getItem('userUuid') )
+    } , [])
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setCurrDoctor( prev => ({
+                ...prev,
+                pfp : reader.result
+            }))
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+    
     return (
-        <>
+        <div className="bg-gray-900 bg-cover bg-no-repeat h-full" style={{backgroundImage : 'url("https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80")'}}>
             <div className='flex flex-col items-center'>
                 <br/>
                 <div className='flex'>
@@ -129,14 +146,13 @@ const Question = () => {
                 {
                     doctors.length <6 ?
                     <>
+                        <InputField value={currDoctor.id} text={"id"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, id : text })} ) }}/>                    
                         <InputField value={currDoctor.name} text={"Doctor's Name"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, name : text })} ) }}/>
                         <InputField value={currDoctor.experience} text={"Years of Experience"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, experience : text })} ) }}/>
                         <InputField value={currDoctor.consultationFees} text={"Consultation fees"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, consultationFees : text })} ) }}/>
-                        <InputField value={currDoctor.distance} text={"Distance"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, distance : text })} ) }}/>
-                        <InputField value={currDoctor.rating} text={"Rating"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, rating : text })} ) }}/>
-                        <InputField value={currDoctor.ratingsCount} text={"No. of ratings"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, ratingsCount : text })} ) }}/>
-                    
-                
+                        <InputField value={currDoctor.rating} text={"Rating"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, rating : text })} ) }}/>                    
+                        <input type="file" accept="image/*" onChange={handleFileChange} />
+
                         <button 
                             onClick={saveDoctor}
                             type="button" 
@@ -153,7 +169,7 @@ const Question = () => {
                     !isSaving ? <>
                         <InputField text={"Page"} onChange={SetPage} value={page}/>
                         <button 
-                            onClick={saveToDB}
+                            onClick={() => {saveToDB(uuid)}}
                             className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"
                         >
                             <span className="relative px-24 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">Save to DB</span>
@@ -169,7 +185,7 @@ const Question = () => {
                 }
             {error}
             </div>
-        </>
+        </div>
     );
 }
 

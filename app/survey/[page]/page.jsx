@@ -31,17 +31,15 @@ const DoctorCard = ({ doctor }) => {
     return (
         <div className="card border border-gray-200 p-4 rounded-lg shadow-md" >
             <div className="image-container">
-                <img className="image" src={doctor.image} alt={doctor.name} width="120" height="120" loading="lazy" />
+                <img className="image" src={doctor.pfp} alt={doctor.name} width="120" height="120" loading="lazy" />
             </div>
             <div className="info-container">
                 <h3>{doctor.name}</h3>
                 <span className="biggerSpan">{doctor.specialty}</span><br />
                 <span>{doctor.experience} years of experience</span><br />
                 <span> ₹{doctor.consultationFees} Consultation fees</span><br />
-                <span>{doctor.distance} kms from me</span><br />
                 <div className="rating-widget">
-                    <div className="rating">{doctor.rating}</div>
-                    <span className="biggerSpan">{doctor.ratingsCount} ratings provided</span>
+                    <div className="rating">{doctor.rating}⭐</div>
                 </div>
             </div>
             <div className="button-container">
@@ -98,7 +96,7 @@ const Survey = ({ params }) => {
     } , [] )
     
     return (
-        <div className="bg-gray-900 bg-cover bg-no-repeat" style={{backgroundImage : 'url("https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80")'}}>
+        <div className="bg-gray-900 bg-cover bg-no-repeat h-full" style={{backgroundImage : 'url("https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80")'}}>
             <br></br>
             <h1 className='text-center'>Question Number {page}</h1>
             <div className="flex items-center justify-center px-12">

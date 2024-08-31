@@ -78,10 +78,6 @@ function response() {
 async function setQuestion({ page, doctors }) {;
     logger.info(page)
     try {
-        doctors = doctors.map( doctor => ({
-            ...doctor,
-            id : uuidv4()
-        }) )
         const doctorsRef = db.collection('questions').doc(page)
         await doctorsRef.set({
             doctors
