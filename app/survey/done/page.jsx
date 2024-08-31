@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { httpsCallable } from 'firebase/functions';
 import { db,functions } from '@/firebase/confing'
     
@@ -78,7 +78,11 @@ const Done = () => {
         q4 : "" ,
         q5 : "" ,
     })
-    const uuid = 'tb0GBAAlERPZXf9t638ZQMC30hW2'
+    const [uuid,setUuid] = useState("")
+    useEffect( () => {
+        setUuid( localStorage.getItem('userUuid') )
+    },[] )
+
     
     return (
         <div className="flex h-screen w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat" style={{backgroundImage : 'url("https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80")'}}>

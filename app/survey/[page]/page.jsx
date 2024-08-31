@@ -22,7 +22,7 @@ const DoctorCard = ({ doctor }) => {
                     responseId : doctor.id
                 }
             });
-            if (parseInt(page,10) === 12) router.push('survey/done')
+            if (parseInt(page,10) === 12) router.push('/survey/done')
             else router.push(`/survey/${parseInt(page,10) + 1}`)
         } catch (error) {
         }
@@ -59,7 +59,7 @@ const DoctorCard = ({ doctor }) => {
 const Survey = ({ params }) => {
 
     const router = useRouter()
-    uuid = 'tb0GBAAlERPZXf9t638ZQMC30hW2'
+    uuid = localStorage.getItem('userUuid')
     const [doctors,setDoctors] = useState( Array.from({ length: 6 }, () => 
         [{
         name: '',
