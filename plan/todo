@@ -28,3 +28,13 @@
 28. FIX - white text in edge browser.
 29. ADD - DoctorId field for admin/question.✔️
 30. ADD - Download DB feature for admin.
+31. ADD - Meta Tags , error page for incorrect routes.
+32. FIX - slow animation while hovering on doctors in survey/[page].
+33. FIX - Last doctor in admin/questions can't be edited. 
+34. FIX - distance attribute coming in questions db in first doctor.
+35. FIX - not going back to survey.
+36. ADD - add next button.
+37. ADD - instructions page and required answers for every question.
+38. ADD - Navbar.
+39. ADD - Add name of user.
+40. ADD - popup for change doctor in survey/1.

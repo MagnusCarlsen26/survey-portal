@@ -33,7 +33,7 @@ const LoginButton = ({onClick}) => {
                 ></path>
                 </svg>
             </div>
-            <span className="text-sm text-black text-white tracking-wider">Sign in with Google</span>
+            <span className="text-sm text-black tracking-wider">Sign in with Google</span>
         </button>
     )
 }

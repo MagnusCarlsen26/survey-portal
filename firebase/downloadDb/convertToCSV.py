@@ -24,18 +24,19 @@ def savedone():
     with open('db/done.csv','w') as file :
         csv_writer = csv.writer(file)
         csv_writer.writerow(header)
-        for uuid in data['__collections__']['done'] :
+        for docuId in data['__collections__']['done'] :
             csv_writer.writerow([
-                uuid,
-                data['__collections__']['done'][uuid]['form']['q1'],
-                data['__collections__']['done'][uuid]['form']['q2'],
-                data['__collections__']['done'][uuid]['form']['q3'],
-                data['__collections__']['done'][uuid]['form']['q4'],
-                data['__collections__']['done'][uuid]['form']['q5'],
+                data['__collections__']['done'][docuId]['uuid'],
+                data['__collections__']['done'][docuId]['form']['q1'],
+                data['__collections__']['done'][docuId]['form']['q2'],
+                data['__collections__']['done'][docuId]['form']['q3'],
+                data['__collections__']['done'][docuId]['form']['q4'],
+                data['__collections__']['done'][docuId]['form']['q5'],
+                data['__collections__']['done'][docuId]['cat'],
             ])
 
 def saveQuestions() :
-    header = ['uuid','email']
+    header = ['page','doctorId1','doctorId2','doctorId3','doctorId4','doctorId5','doctorId6']
     with open('db/questions.csv','w') as file :
         csv_writer = csv.writer(file)
         csv_writer.writerow(header)
@@ -83,6 +84,6 @@ with open('backup.json', 'r') as file:
 
 saveUsers()
 saveAdmins()
-savedone()
+# savedone()
 saveQuestions()
 saveResponse()
