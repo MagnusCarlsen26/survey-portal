@@ -40,3 +40,8 @@ firebase/appConfig.json
 firebase/backup.json
 firebase/downloadDb/appConfig.json
 firebase/downloadDb/backup.json
+firebase/downloadDb/db/done.csv
+firebase/downloadDb/db/done.csv
+firebase/downloadDb/db/done.csv
+firebase/downloadDb/db/users.csv
+firebase/downloadDb/db/questions.csv

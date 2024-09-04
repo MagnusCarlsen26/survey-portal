@@ -4,7 +4,7 @@ import { logger } from "firebase-functions";
     
 async function response({ uuid, qid, responseId }) {
     try {
-        if (!await checkPrevResponse({ uuid, page : qid })) return "Please submit response for previous quesitons first."     
+        if (!await checkPrevResponse({ uuid, page : qid, lookupTable : 'response' })) return "Please submit response for previous quesitons first."     
         await db.collection('response').add({
             uuid,
             qid,
@@ -29,12 +29,13 @@ async function getQuestion({ uuid, page }) {
     }
 }
 
-async function checkPrevResponse({ uuid,page }) {
+async function checkPrevResponse({ uuid,page,lookupTable }) {
     try {
         page = page.toString()
+        logger.info("Loookup",lookupTable)
         for( let qid = 1; qid<page; qid++ ) {
             logger.info(`Checking for ${uuid},${qid}`)
-            const query = await db.collection('response')
+            const query = await db.collection(lookupTable)
                 .where('uuid','==',uuid)
                 .where('qid','==',qid.toString())
                 .get()
@@ -42,6 +43,7 @@ async function checkPrevResponse({ uuid,page }) {
             if (query.empty) {
                 return false
             } else {
+
             }
         }
         return true
@@ -51,17 +53,20 @@ async function checkPrevResponse({ uuid,page }) {
     }
 }
 
-async function done({ uuid, form }) {
+async function done({ uuid, form, page }) {
     try {
-        if (!await checkPrevResponse({ uuid, page : 13 })) return "Please answer all the questions."
+        // if (!await checkPrevResponse({ uuid, page : 13, lookupTable : 'response' })) return "Please answer all the survey questions."
+        if (!await checkPrevResponse({ uuid, page , lookupTable : 'done' })) return "Please answer all the post survey questions."
 
         await db.collection('done').add({
             uuid,
             form,
+            page,
             cat : Date.now()
         })
         return "done"
     } catch(error) {
+        logger.error("error in done",error)
         return error
     }
 }

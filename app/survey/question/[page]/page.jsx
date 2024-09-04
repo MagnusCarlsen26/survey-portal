@@ -1,6 +1,6 @@
 "use client"
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react';
 import { httpsCallable } from 'firebase/functions';
 import { db,functions } from '@/firebase/confing'
@@ -11,6 +11,8 @@ let page,uuid
 const DoctorCard = ({ doctor }) => {
 
     const router = useRouter()
+    const [isConfirm,setIsConfirm] = useState(false)
+
     const submitResponse = async() => {
         try {
             const result = await httpsCallable(functions, 'isAccess')({
@@ -18,7 +20,7 @@ const DoctorCard = ({ doctor }) => {
                 option : 'response',
                 payload : { 
                     uuid,
-                    qid : page,
+                    page,
                     responseId : doctor.id
                 }
             });
@@ -45,10 +47,19 @@ const DoctorCard = ({ doctor }) => {
             <div className="button-container">
                 <button 
                     className="button-4"
-                    onClick={submitResponse}
+                    style={isConfirm ? { backgroundColor : '#7952b3',color : 'white' } : {}}
+                    onClick={() => setIsConfirm(prev => true)}
                 >
                     Book a visit now
                 </button>
+                {
+                    isConfirm && 
+                    (
+                        <div>
+                            
+                        </div>
+                    )
+                }
             </div>
         </div>
     );
@@ -57,7 +68,7 @@ const DoctorCard = ({ doctor }) => {
 const Survey = ({ params }) => {
 
     const router = useRouter()
-    uuid = localStorage.getItem('userUuid')
+
     const [doctors,setDoctors] = useState( Array.from({ length: 6 }, () => 
         [{
         name: '',
@@ -93,6 +104,7 @@ const Survey = ({ params }) => {
             }
         }
         doo()
+        uuid = localStorage.getItem('userUuid')
     } , [] )
     
     return (
