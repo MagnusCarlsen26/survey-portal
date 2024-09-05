@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { db,functions } from '@/firebase/confing'
+import { httpsCallable } from 'firebase/functions';
+import { useState, useEffect } from "react"
 
 function CheckboxGroup({ heading, options, onChange }) {
 
@@ -49,13 +51,28 @@ const Survey = () => {
         "Other member male" : false,
         "Other member female": false
     })
+    const [uuid,setUuid] = useState()
 
-    console.log(checked)
+    useEffect( () => {
+        setUuid(localStorage.getItem('userUuid'))
+    } ,[])
+
+    const onSubmit = async() => {
+        await httpsCallable(functions, 'isAccess')({
+            uuid,
+            option : 'done',
+            payload : { 
+                uuid,
+                page : "2",
+                form : checked
+            }
+        });
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center">
             <div className="p-6 rounded-lg shadow-lg max-w-md w-full">
-                <form>
+                {/* <form> */}
                     <CheckboxGroup 
                         heading={"If yes, what is the relationship with this family member?*"}
                         options={[
@@ -71,7 +88,14 @@ const Survey = () => {
                             [option] : isChecked
                         }) ) }
                     />
-                </form>
+                    <button
+                        type="submit"
+                        className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg"
+                        onClick={onSubmit}
+                    >
+                        Submit
+                    </button>
+                {/* </form> */}
             </div>
         </div>
     )

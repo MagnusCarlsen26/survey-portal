@@ -1,6 +1,8 @@
 "use client"
 
-const { useState } = require("react")
+import { db,functions } from '@/firebase/confing'
+import { httpsCallable } from 'firebase/functions';
+const { useState, useEffect } = require("react")
 
 function RadioButton({ heading, options, onChange }) {
 
@@ -47,13 +49,29 @@ const SurveyForm = () => {
         doMaleDoctorMoreExperienced : ""
     })
 
-    console.log((userResponse))
+    const [uuid,setUuid] = useState()
+
+    useEffect( () => {
+        setUuid(localStorage.getItem('userUuid'))
+    } ,[])
+
+    const onSubmit = async() => {
+        await httpsCallable(functions, 'isAccess')({
+            uuid,
+            option : 'done',
+            payload : { 
+                uuid,
+                page : 3,
+                form : userResponse
+            }
+        });
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center">
             <div className="p-6 rounded-lg shadow-lg max-w-md w-full">
                 <h1 className="text-center">Belief</h1>
-                <form>
+                {/* <form> */}
                     <RadioButton
                         heading={"Think of the last time you had to see a doctor. Was it a male or female doctor?"} 
                         options={["Male Doctor","Female Doctor","Not seen a doctor ever"]}
@@ -87,7 +105,14 @@ const SurveyForm = () => {
                             doMaleDoctorMoreExperienced
                         }) )}
                     />
-                </form>
+                    <button
+                        type="submit"
+                        className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg"
+                        onClick={onSubmit}
+                    >
+                        Submit
+                    </button>
+                {/* </form> */}
             </div>
         </div>
     )

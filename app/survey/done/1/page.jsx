@@ -76,7 +76,7 @@ const SurveyForm = () => {
             option : 'done',
             payload : { 
                 uuid,
-                page : 1,
+                page : "1",
                 form : userResponse
             }
         });
