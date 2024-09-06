@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { httpsCallable } from 'firebase/functions';
 import { db,functions } from '@/firebase/confing'
+import { useRouter } from 'next/navigation';
 
 function RadioButton({ heading, options, onChange }) {
 
@@ -58,6 +59,7 @@ function InputField({text, onChange, type}) {
 
 const SurveyForm = () => {
 
+    const router = useRouter()
     const [userResponse, setUserResponse] = useState({
         gender : "",
         age : "",
@@ -65,7 +67,7 @@ const SurveyForm = () => {
         isFamilyDoctor : ""
     })
     const [uuid,setUuid] = useState()
-
+    const [lockedChoice,setLockedChoice] = useState(false)
     useEffect( () => {
         setUuid(localStorage.getItem('userUuid'))
     } ,[])
@@ -80,6 +82,21 @@ const SurveyForm = () => {
                 form : userResponse
             }
         });
+
+        router.push('/survey/done/2')
+    }
+
+    const showConfirmation = () => {
+        const userResponse = confirm("Confirm your choice");
+        
+        if (userResponse) {
+            if (lockedChoice) {
+                alert("You have already selected a choice, please proceed to next question.")
+            } else {
+                setLockedChoice(true)
+                onSubmit()
+            }
+        }
     }
 
     return (
@@ -132,9 +149,9 @@ const SurveyForm = () => {
                     <button
                         type="submit"
                         className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg"
-                        onClick={onSubmit}
+                        onClick={showConfirmation}
                     >
-                        Submit
+                        Next
                     </button>
                 {/* </form> */}
             </div>

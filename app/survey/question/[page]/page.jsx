@@ -6,12 +6,12 @@ import { httpsCallable } from 'firebase/functions';
 import { db,functions } from '@/firebase/confing'
 import { useState } from 'react'
 
-let page,uuid
+let page
+let uuid = localStorage.getItem('userUuid')
 
-const DoctorCard = ({ doctor }) => {
+const DoctorCard = ({ doctor, lockedChoice, setLockedChoice }) => {
 
     const router = useRouter()
-    const [isConfirm,setIsConfirm] = useState(false)
 
     const submitResponse = async() => {
         try {
@@ -20,16 +20,29 @@ const DoctorCard = ({ doctor }) => {
                 option : 'response',
                 payload : { 
                     uuid,
-                    page,
+                    qid : page,
                     responseId : doctor.id
                 }
             });
-            if (parseInt(page,10) === 12) router.push('/survey/done')
-            else router.push(`/survey/${parseInt(page,10) + 1}`)
+            // if (parseInt(page,10) === 12) router.push('/survey/done/instructions')
+            // else router.push(`/survey/question/${parseInt(page,10) + 1}`)
         } catch (error) {
         }
-    }   
+    } 
 
+    const showConfirmation = () => {
+        const userResponse = confirm("Confirm your choice");
+        
+        if (userResponse) {
+            if (lockedChoice) {
+                alert("You have already selected a choice, please proceed to next question.")
+            } else {
+                setLockedChoice(true)
+                submitResponse()
+            }
+        }
+    }
+          
     return (
         <div className="card border border-gray-200 p-4 rounded-lg shadow-md" >
             <div className="image-container">
@@ -47,19 +60,10 @@ const DoctorCard = ({ doctor }) => {
             <div className="button-container">
                 <button 
                     className="button-4"
-                    style={isConfirm ? { backgroundColor : '#7952b3',color : 'white' } : {}}
-                    onClick={() => setIsConfirm(prev => true)}
+                    onClick={showConfirmation}
                 >
                     Book a visit now
                 </button>
-                {
-                    isConfirm && 
-                    (
-                        <div>
-                            
-                        </div>
-                    )
-                }
             </div>
         </div>
     );
@@ -80,9 +84,12 @@ const Survey = ({ params }) => {
         ratingsCount: '',
         image: ''
     }]))
+    const [lockedChoice,setLockedChoice] = useState(false)
+    
     page = params.page
 
     useEffect( () => {
+        console.log(uuid)
         const doo = async() => {
             try {
                 const response = await httpsCallable(functions, 'isAccess')({
@@ -100,11 +107,11 @@ const Survey = ({ params }) => {
                 }
                 console.log(doctors)
             } catch(error) {
-                
+                console.error(error)
             }
         }
         doo()
-        uuid = localStorage.getItem('userUuid')
+
     } , [] )
     
     return (
@@ -115,19 +122,29 @@ const Survey = ({ params }) => {
                 <br></br>
                 <div>
                     <div className="flex">
-                        <DoctorCard doctor={doctors[0]} />
-                        <DoctorCard doctor={doctors[1]} />
+                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[0]} />
+                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[1]} />
                     </div>
                     <div className="flex">
-                        <DoctorCard doctor={doctors[2]} />
-                        <DoctorCard doctor={doctors[3]} />
+                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[2]} />
+                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[3]} />
                     </div>
                     <div className="flex">
-                        <DoctorCard doctor={doctors[4]} />
-                        <DoctorCard doctor={doctors[5]} />
+                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[4]} />
+                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[5]} />
                     </div>
                 </div>
+                {
+                    lockedChoice && 
+                    <button 
+                        className='border border-black'
+                        onClick={() => router.push(`/survey/question/${parseInt(page,10) + 1}`)}
+                    >
+                        Next
+                    </button>
+                }
             </div>
+
         </div>
     );
 }

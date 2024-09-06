@@ -5,6 +5,8 @@ import { logger } from "firebase-functions";
 async function response({ uuid, qid, responseId }) {
     try {
         if (!await checkPrevResponse({ uuid, page : qid, lookupTable : 'response' })) return "Please submit response for previous quesitons first."     
+        if (!await checkIfExistResponse({ uuid, page : qid, lookupTable : 'response' })) return "You have already attempted the question."  
+        
         await db.collection('response').add({
             uuid,
             qid,
@@ -20,7 +22,7 @@ async function response({ uuid, qid, responseId }) {
 
 async function getQuestion({ uuid, page }) {
     try {
-        if (!await checkPrevResponse({ uuid,page })) return "Please attempt previous questions first."
+        if (!await checkPrevResponse({ uuid,page,lookupTable : 'response' })) return "Please attempt previous questions first."
         const question =  await db.collection('questions').doc(page).get()
         return question.data()
     }  catch (error) {
@@ -29,21 +31,32 @@ async function getQuestion({ uuid, page }) {
     }
 }
 
+async function checkIfExistResponse({ uuid, page, lookupTable }) {
+    try {
+        logger.info(uuid,page,lookupTable)
+        const query = await db.collection(lookupTable)
+            .where('uuid','==',uuid)
+            .where('qid','==',page)
+            .get()
+        logger.info(query.empty)
+        if (query.empty) return true 
+        else return false
+    } catch (error) {
+        logger.error("error in checkIfExistResponse",error)
+        return false
+    }
+}
+
 async function checkPrevResponse({ uuid,page,lookupTable }) {
     try {
         page = page.toString()
-        logger.info("Loookup",lookupTable)
         for( let qid = 1; qid<page; qid++ ) {
-            logger.info(`Checking for ${uuid},${qid}`)
             const query = await db.collection(lookupTable)
                 .where('uuid','==',uuid)
                 .where('qid','==',qid.toString())
                 .get()
-            logger.info(`Statue : ${query.empty}`)
             if (query.empty) {
                 return false
-            } else {
-
             }
         }
         return true
@@ -57,11 +70,12 @@ async function done({ uuid, form, page }) {
     try {
         // if (!await checkPrevResponse({ uuid, page : 13, lookupTable : 'response' })) return "Please answer all the survey questions."
         if (!await checkPrevResponse({ uuid, page , lookupTable : 'done' })) return "Please answer all the post survey questions."
+        if (!await checkIfExistResponse({ uuid, page, lookupTable : 'done' })) return "You have already attempted the question."
 
         await db.collection('done').add({
             uuid,
             form,
-            page,
+            qid : page,
             cat : Date.now()
         })
         return "done"

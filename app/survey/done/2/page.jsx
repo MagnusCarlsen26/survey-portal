@@ -2,6 +2,7 @@
 
 import { db,functions } from '@/firebase/confing'
 import { httpsCallable } from 'firebase/functions';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from "react"
 
 function CheckboxGroup({ heading, options, onChange }) {
@@ -43,6 +44,7 @@ function CheckboxGroup({ heading, options, onChange }) {
 
 const Survey = () => {
 
+    const router = useRouter()
     const [ checked, setChecked ] = useState({
         "Father" : false,
         "Mother" : false,
@@ -67,6 +69,7 @@ const Survey = () => {
                 form : checked
             }
         });
+        router.push('/survey/done/2')
     }
 
     return (

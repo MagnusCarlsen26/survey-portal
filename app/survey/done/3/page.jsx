@@ -2,6 +2,7 @@
 
 import { db,functions } from '@/firebase/confing'
 import { httpsCallable } from 'firebase/functions';
+import { useRouter } from 'next/navigation';
 const { useState, useEffect } = require("react")
 
 function RadioButton({ heading, options, onChange }) {
@@ -42,6 +43,7 @@ function RadioButton({ heading, options, onChange }) {
 
 const SurveyForm = () => {
 
+    const router = useRouter()
     const [userResponse, setUserResponse] = useState({
         lastTimeWhichDoctor : "",
         doMaleDoctorPrefer : "",
@@ -65,6 +67,7 @@ const SurveyForm = () => {
                 form : userResponse
             }
         });
+        router.push('/survey/done/thankyou')
     }
 
     return (
