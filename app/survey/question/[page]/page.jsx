@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import { useRouter } from 'next/navigation'
@@ -11,34 +12,17 @@ let uuid = localStorage.getItem('userUuid')
 
 const DoctorCard = ({ doctor, lockedChoice, setLockedChoice }) => {
 
-    const router = useRouter()
-
-    const submitResponse = async() => {
-        try {
-            const result = await httpsCallable(functions, 'isAccess')({
-                uuid,
-                option : 'response',
-                payload : { 
-                    uuid,
-                    qid : page,
-                    responseId : doctor.id
-                }
-            });
-            // if (parseInt(page,10) === 12) router.push('/survey/done/instructions')
-            // else router.push(`/survey/question/${parseInt(page,10) + 1}`)
-        } catch (error) {
-        }
-    } 
-
     const showConfirmation = () => {
-        const userResponse = confirm("Confirm your choice");
+        let userResponse = confirm(`Confirm your choice : ${doctor.name}`);
         
         if (userResponse) {
             if (lockedChoice) {
-                alert("You have already selected a choice, please proceed to next question.")
+                let userResponse = confirm(`Do you want to change your choice to : ${doctor.name}`)
+                if (userResponse) {
+                    setLockedChoice({ responseId : doctor.id, doctorName : doctor.name})
+                }
             } else {
-                setLockedChoice(true)
-                submitResponse()
+                setLockedChoice({ responseId : doctor.id, doctorName : doctor.name})
             }
         }
     }
@@ -85,8 +69,31 @@ const Survey = ({ params }) => {
         image: ''
     }]))
     const [lockedChoice,setLockedChoice] = useState(false)
-    
+    const [loading,setLoading] = useState(false)
+
     page = params.page
+
+    const submitResponse = async(responseId) => {
+        try {
+            setLoading(true)
+            const result = await httpsCallable(functions, 'isAccess')({
+                uuid,
+                option : 'response',
+                payload : { 
+                    uuid,
+                    qid : page,
+                    responseId
+                }
+            });
+            if (result.data === "You have already attempted the question.") {
+                alert("Your current response won't be considered as you have already attempted the question.")
+                if (parseInt(page,10) === 12) router.push('/survey/done/instructions')
+                else router.push(`/survey/question/${parseInt(page,10) + 1}`)
+            }
+        } catch (error) {
+        }
+        setLoading(false)
+    } 
 
     useEffect( () => {
         console.log(uuid)
@@ -98,6 +105,7 @@ const Survey = ({ params }) => {
                     payload : {
                         uuid,
                         page,
+
                     }
                 })
                 if (response.data === 'Please attempt previous questions first.') {
@@ -115,11 +123,33 @@ const Survey = ({ params }) => {
     } , [] )
     
     return (
-        <div className="bg-gray-900 bg-cover bg-no-repeat h-full" style={{backgroundImage : 'url("https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80")'}}>
+        <div 
+            className="bg-cover bg-no-repeat h-full bg-white" 
+            // style={{backgroundImage : 'url("https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80")'}}
+        >
+
+            <nav class="bg-white border-gray-200 dark:bg-gray-900 relative">
+                <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+                    <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+                        <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
+                        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">MySwasthya</span>
+                    </a>
+                    
+                    <p class="text-blue-300 text-center absolute inset-0 flex justify-center items-center">
+                        Choice Set {page}
+                    </p>
+                
+                    <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                        <button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+                            <span class="sr-only">Open user menu</span>
+                            <img class="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="user photo"/>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
             <br></br>
-            <h1 className='text-center'>Choice Set {page}</h1>
             <div className="flex items-center justify-center px-12">
-                <br></br>
                 <div>
                     <div className="flex">
                         <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[0]} />
@@ -134,19 +164,38 @@ const Survey = ({ params }) => {
                         <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[5]} />
                     </div>
                 </div>
-                {
-                    lockedChoice && 
-                    <button 
-                        className='border border-black'
-                        onClick={() => router.push(`/survey/question/${parseInt(page,10) + 1}`)}
-                    >
-                        Next
-                    </button>
+                
+                {lockedChoice && 
+                    <div className='flex items-center justify-center'>
+                        <div>
+                            <p>{lockedChoice?.doctorName}</p>
+                            <button 
+                                type="button" 
+                                class="bg-green-600 text-white rounded-r-md py-2 border-l border-gray-200 hover:bg-green-800 hover:text-white px-3"
+                                onClick={() => submitResponse(lockedChoice.responseId)}
+                            
+                            >
+                            <div class="flex flex-row align-middle">
+                                <span class="mr-2 text-base">Next</span>
+                                {loading ? 
+                                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                                        <g transform="rotate(0 50 50)"><circle cx="50" cy="50" r="40" stroke="#fff" stroke-width="8" fill="none"><animate attributeName="stroke-dasharray" values="0, 200; 100, 200; 200, 200" dur="1.5s" repeatCount="indefinite"/><animate attributeName="stroke-dashoffset" values="0; -40; -100" dur="1.5s" repeatCount="indefinite" /></circle></g>
+                                    </svg> 
+                                    : 
+                                    <svg class="w-5 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                    </svg>
+                                }
+
+                            </div>
+                            </button>
+                        </div>
+                    </div>
                 }
             </div>
-
         </div>
     );
 }
 
 export default Survey;
+           

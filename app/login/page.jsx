@@ -64,7 +64,7 @@ const Auth = () => {
             <div className="rounded-xl bg-gray-800 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
                 <div className="text-white">
                     <div className="mb-8 flex flex-col items-center">
-                        <img src="https://erp.iitj.ac.in/favicon.ico" width="150" alt="" srcset="" />
+                        <img src="https://erp.iitj.ac.in/favicon.ico" width="150" alt="" />
                         {/* ! Example */}
                         <h1 className="mb-2 text-2xl text-white">IITJ Survey</h1>
                     </div>

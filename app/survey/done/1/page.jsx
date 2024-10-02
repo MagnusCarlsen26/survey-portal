@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import React, { useEffect } from 'react';
@@ -10,17 +11,17 @@ function RadioButton({ heading, options, onChange }) {
 
     return (
         <>
-            <p>{heading}</p>
+            <p className='font-bold'>{heading}</p>
             {
-                options.map( option => (
+                options.map( (option,index) => (
 
-                    <div className="flex gap-10">
+                    <div key={index} className="flex gap-10">
                         <div className="inline-flex items-center">
                             <label className="relative flex items-center p-3 rounded-full cursor-pointer" htmlFor={option} data-ripple-dark="true">
                                 <input 
                                     name={heading}
                                     type="radio"
-                                    className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-gray-900 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:before:bg-gray-900 hover:before:opacity-10"
+                                    className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-black text-gray-900 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:before:bg-gray-900 hover:before:opacity-10"
                                     id={option} 
                                     value={option}
                                     onChange={() => onChange(option)}
@@ -38,6 +39,8 @@ function RadioButton({ heading, options, onChange }) {
                     </div>  
                 ) )
             }
+            <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"/>
+
         </>
     )   
 }
@@ -50,9 +53,10 @@ function InputField({text, onChange, type}) {
             </label>
             <input
                 type={type}
-                className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md border-black border-2"
+                className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm rounded px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md border-black border-2"
                 onChange={(e) => onChange(e.target.value)}
             />
+            <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"/>
         </div>
     )
 }
@@ -61,51 +65,92 @@ const SurveyForm = () => {
 
     const router = useRouter()
     const [userResponse, setUserResponse] = useState({
+        email : "",
         gender : "",
         age : "",
         familarity : "",
-        isFamilyDoctor : ""
+        isFamilyDoctor : "",
     })
     const [uuid,setUuid] = useState()
     const [lockedChoice,setLockedChoice] = useState(false)
+    const [loading,setLoading] = useState(false)
+
     useEffect( () => {
         setUuid(localStorage.getItem('userUuid'))
     } ,[])
 
     const onSubmit = async() => {
-        await httpsCallable(functions, 'isAccess')({
-            uuid,
-            option : 'done',
-            payload : { 
+        setLoading(true)
+        try {
+
+            const result = await httpsCallable(functions, 'isAccess')({
                 uuid,
-                page : "1",
-                form : userResponse
+                option : 'done',
+                payload : { 
+                    uuid,
+                    page : "1",
+                    form : userResponse
+                }
+            });
+            if (result.data === "You have already attempted the question.") {
+                alert("Your current response won't be considered as you have already attempted the question.")
+                router.push('/survey/done/2')
             }
-        });
-
-        router.push('/survey/done/2')
-    }
-
-    const showConfirmation = () => {
-        const userResponse = confirm("Confirm your choice");
-        
-        if (userResponse) {
-            if (lockedChoice) {
-                alert("You have already selected a choice, please proceed to next question.")
-            } else {
-                setLockedChoice(true)
-                onSubmit()
+            else if ( result.data === "  " ) {
+                alert("Please answer all the previous questions.")
+                router.push('/survey/done/1')
             }
+            router.push('/survey/done/2')
+        } catch(error) {
+
         }
+        setLoading(false)
     }
-
+        
     return (
-        <div className="min-h-screen flex items-center justify-center">
-            <div className="p-6 rounded-lg shadow-lg max-w-md w-full">
-                {/* <form> */}
+        <>
+            <nav class="bg-white border-gray-200 dark:bg-gray-900 relative">
+                <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+                    <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+                        <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
+                        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">MySwasthya</span>
+                    </a>
+                    
+                    <p class="text-blue-300 text-center absolute inset-0 flex justify-center items-center">
+                        Post Experiment Survey
+                    </p>
+                
+                    <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                        <button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+                            <span class="sr-only">Open user menu</span>
+                            <img class="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="user photo"/>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="p-6 rounded-lg shadow-lg max-w-md w-full">
+                    <InputField
+                        text={"IIT Jodhpur email id (This is only be used for data linking purposes and will not be shared with anyone) *"} 
+                        onChange={(email) => setUserResponse( prev => ({
+                                ...prev,
+                                email : email
+                            }) 
+                        )}
+                        type={"text"}
+                    />
+                    <InputField
+                        text={"Roll No ( This is only be used for data linking purposes and will not be shared with anyone) *"} 
+                        onChange={(email) => setUserResponse( prev => ({
+                                ...prev,
+                                email : email
+                            }) 
+                        )}
+                        type={"text"}
+                    />
                     <RadioButton 
-                        heading={'Gender'}
-                        options={ ['male','female','prefer not to say','other'] }
+                        heading={'Gender *'}
+                        options={ ['Male','Female','Prefer not to say','Other'] }
                         onChange={(gender) => setUserResponse( prev => ({
                                 ...prev,
                                 gender,
@@ -149,13 +194,18 @@ const SurveyForm = () => {
                     <button
                         type="submit"
                         className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg"
-                        onClick={showConfirmation}
+                        onClick={onSubmit}
                     >
-                        Next
+                        <p  className='flex justify-center'>Next &nbsp;
+                        {loading &&
+                            <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                                <g transform="rotate(0 50 50)"><circle cx="50" cy="50" r="40" stroke="#fff" stroke-width="8" fill="none"><animate attributeName="stroke-dasharray" values="0, 200; 100, 200; 200, 200" dur="1.5s" repeatCount="indefinite"/><animate attributeName="stroke-dashoffset" values="0; -40; -100" dur="1.5s" repeatCount="indefinite" /></circle></g>
+                            </svg> 
+                        }</p>
                     </button>
-                {/* </form> */}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
