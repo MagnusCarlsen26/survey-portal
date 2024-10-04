@@ -68,11 +68,16 @@ async function checkPrevResponse({ uuid,page,lookupTable }) {
 
 async function done({ uuid, form, page }) {
     try {
-        // if (!await checkPrevResponse({ uuid, page : 13, lookupTable : 'response' })) return "Please answer all the survey questions."
+        if (!await checkPrevResponse({ uuid, page : 13, lookupTable : 'response' })) return "Please answer all the survey questions."
         if (!await checkPrevResponse({ uuid, page , lookupTable : 'done' })) return "Please answer all the post survey questions."
 
         let result
-
+        Object.keys(form).forEach( key => {
+            if ( form[key] === "" ) {
+                result = "All questions are compulsory. Please attempt all the questions."
+                return
+            }
+        })
         if (result) return result
         if (!await checkIfExistResponse({ uuid, page, lookupTable : 'done' })) return "You have already attempted the question."
 

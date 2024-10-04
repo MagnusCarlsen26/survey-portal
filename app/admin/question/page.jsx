@@ -51,8 +51,8 @@ const Question = () => {
 
     const saveToDB = async (uuid) => {
         let result
+        setServerResponse("")
         try {
-            console.log('saving')
             setIsSaving(prev => true)
             result = await httpsCallable(functions, 'isAdminAccess')({
                 uuid ,
@@ -64,8 +64,8 @@ const Question = () => {
             });
         } catch (error) {
             console.log(result)
-            setError(JSON.stringify(result))
         }
+        setServerResponse(JSON.stringify(result))
         setIsSaving(prev => false)
 
     };
@@ -92,7 +92,6 @@ const Question = () => {
     }
 
     const [isSaving,setIsSaving] = useState(false)
-    const [error,setError] = useState("")
     const [doctors,setDoctors] = useState([])
     const [page,SetPage] = useState()
     const [isEdit,setIsEdit] = useState(false)
@@ -106,6 +105,7 @@ const Question = () => {
         pfp : "",
     }); 
     const [uuid,setUuid] = useState("")
+    const [serverResponse,setServerResponse] = useState("")
 
     useEffect( () => {
         setUuid( localStorage.getItem('userUuid') )
@@ -123,7 +123,7 @@ const Question = () => {
           };
           reader.readAsDataURL(file);
         }
-      };
+    };
     
     return (
         <div className="bg-gray-900 bg-cover bg-no-repeat h-full" style={{backgroundImage : 'url("https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80")'}}>
@@ -183,7 +183,7 @@ const Question = () => {
                     </button> 
                     : ""
                 }
-            {error}
+            {serverResponse}
             </div>
         </div>
     );

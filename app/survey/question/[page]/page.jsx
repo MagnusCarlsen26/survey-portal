@@ -112,7 +112,6 @@ const Survey = ({ params }) => {
                     payload : {
                         uuid,
                         page,
-
                     }
                 })
                 if (response.data === 'Please attempt previous questions first.') {
@@ -120,8 +119,8 @@ const Survey = ({ params }) => {
                 } else {
                     setDoctors(prev => response.data.doctors)
                 }
-                console.log(doctors)
             } catch(error) {
+                alert("You might not be logged in or you might not have survey access. Login here - localhost:3000/login")
                 console.error(error)
             }
 
@@ -144,18 +143,49 @@ const Survey = ({ params }) => {
     
     return (
         <div 
-            className="bg-cover bg-no-repeat h-full bg-white" 
-            // style={{backgroundImage : 'url("https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80")'}}
+            className="bg-cover bg-no-repeat h-full" 
+            style={{backgroundImage : 'url(/1.jpg)'}}
         >
 
-            <nav class="bg-white border-gray-200 dark:bg-gray-900 relative">
+            <nav class="bg-black border-gray-200 relative">
                 <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
-                        <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
+                    <svg
+  fill="#00c9cc"
+  width="24px   "
+  height="24px  "
+  viewBox="0 0 512.00 512.00"
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+  stroke="#00c9cc"
+  strokeWidth="26.624"
+>
+  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+  <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" stroke="#CCCCCC" strokeWidth="3.072"></g>
+  <g id="SVGRepo_iconCarrier">
+    <g id="_x35_94_x2C__Hospital_x2C__medical_x2C__plus">
+      <g>
+        <g>
+          <g>
+            <g>
+              <path d="M326.348,490.956h-140c-5.523,0-10-4.478-10-10v-145h-145c-5.523,0-10-4.478-10-10v-140c0-5.523,4.477-10,10-10h145 v-145c0-5.523,4.477-10,10-10h140c5.522,0,10,4.477,10,10v145h145c5.522,0,10,4.477,10,10v140c0,5.522-4.478,10-10,10h-145v145 C336.348,486.479,331.87,490.956,326.348,490.956z M196.347,470.956h120v-145c0-5.522,4.478-10,10-10h145v-120h-145 c-5.522,0-10-4.477-10-10v-145h-120v145c0,5.523-4.477,10-10,10h-145v120h145c5.523,0,10,4.478,10,10V470.956z"></path>
+            </g>
+            <g>
+              <path d="M286.348,450.956h-60c-5.523,0-10-4.478-10-10v-140h-150c-5.523,0-10-4.478-10-10v-70c0-5.523,4.477-10,10-10h150v-140 c0-5.523,4.477-10,10-10h60c5.522,0,10,4.477,10,10v140h150c5.522,0,10,4.477,10,10v70c0,5.522-4.478,10-10,10h-150v140 C296.348,446.479,291.87,450.956,286.348,450.956z M236.347,430.956h40v-140c0-5.522,4.478-10,10-10h150v-50h-150 c-5.522,0-10-4.477-10-10v-140h-40v140c0,5.523-4.477,10-10,10h-150v50h150c5.523,0,10,4.478,10,10V430.956z"></path>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+    <g id="Layer_1"></g>
+  </g>
+</svg>
+
                         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">MySwasthya</span>
                     </a>
                     
-                    <p class="text-blue-300 text-center absolute inset-0 flex justify-center items-center">
+                    <p class="text-blue-300 text-center absolute inset-0 flex justify-center items-center text-xl">
                         Choice Set {page}
                     </p>
                 

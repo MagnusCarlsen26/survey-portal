@@ -71,6 +71,7 @@ const Survey = () => {
                 })
                 setUserName(response.data)
             } catch(error) {
+                alert("You might not be logged in or you might not have survey access. Login here - localhost:3000/login")
                 console.error(error)
             }
         }
@@ -86,7 +87,7 @@ const Survey = () => {
                 option : 'done',
                 payload : { 
                 uuid,
-                page : "1",
+                page : "2",
                 form : checked
             }
             });
@@ -94,13 +95,13 @@ const Survey = () => {
                 alert("Your current response won't be considered as you have already attempted the question.")
                 router.push('/survey/done/3')
             }
-            else if ( result.data === "  " ) {
+            else if ( result.data === "Please answer all the post survey questions." ) {
                 alert("Please answer all the previous questions.")
                 router.push('/survey/done/1')
             }else if ( result.data === "All questions are compulsory. Please attempt all the questions." ) {
                 alert("All questions are compulsory. Please attempt all the questions.")
-            } else if ( result.data === "Done" ) {                
-                router.push('/survey/done/2')
+            } else if ( result.data === "done" ) {                
+                router.push('/survey/done/3')
             }
         } catch(error) {
 

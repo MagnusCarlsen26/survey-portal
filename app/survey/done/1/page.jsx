@@ -90,6 +90,7 @@ const SurveyForm = () => {
                 })
                 setUserName(response.data)
             } catch(error) {
+                alert("You might not be logged in or you might not have survey access. Login here - localhost:3000/login")
                 console.error(error)
             }
         }
@@ -116,18 +117,21 @@ const SurveyForm = () => {
                 router.push('/survey/done/1')
             } else if ( result.data === "All questions are compulsory. Please attempt all the questions." ) {
                 alert("All questions are compulsory. Please attempt all the questions.")
-            } else if ( result.data === "Done" ) {                
+            } else if ( result.data === "done" ) {                
                 router.push('/survey/done/2')
             }
         } catch(error) {
-
+            alert("")
         }
 
         setLoading(false)
     }
         
     return (
-        <>
+        <div
+            className="h-screen w-full items-center justify-center bg-cover bg-no-repeat"
+            style={{backgroundImage : 'url(/1.jpg)'}}
+        >
             <nav class="bg-white border-gray-200 dark:bg-gray-900 relative">
                 <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -144,6 +148,7 @@ const SurveyForm = () => {
                     </div>
                 </div>
             </nav>
+
             <div className="min-h-screen flex items-center justify-center">
                 <div className="p-6 rounded-lg shadow-lg max-w-md w-full">
                     <InputField
@@ -221,7 +226,7 @@ const SurveyForm = () => {
                     </button>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

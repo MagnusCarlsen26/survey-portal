@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import { auth, GoogleAuthProvider, signInWithPopup } from '@/firebase/confing';
@@ -52,7 +53,6 @@ const Auth = () => {
 
             const user = result.user;
             localStorage.setItem("userUuid",user.uid)
-            console.log('User info:', user.uid);
             router.push('/survey/instructions')
         } catch (error) {
             setErr("Please use an IITJ Email.")
@@ -60,19 +60,22 @@ const Auth = () => {
     };
 
     return (
-        <div className="flex h-screen w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat" style={{backgroundImage : 'url("https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80")'}}>
-            <div className="rounded-xl bg-gray-800 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
+        <div 
+            className="flex h-screen w-full items-center justify-center bg-cover bg-no-repeat"
+            style={{backgroundImage : 'url(/1.jpg)'}}
+        >
+            <div className="rounded-xl bg-slate-50 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
                 <div className="text-white">
                     <div className="mb-8 flex flex-col items-center">
                         <img src="https://erp.iitj.ac.in/favicon.ico" width="150" alt="" />
                         {/* ! Example */}
-                        <h1 className="mb-2 text-2xl text-white">IITJ Survey</h1>
+                        <h1 className="mb-2 text-2xl text-black">IITJ Survey</h1>
                     </div>
                     <LoginButton 
                         onClick={signInWithGoogle}
                     />
                     <br></br>
-                    <p className='text-center'>{err}</p>
+                    <div className='text-center bg-red-600 rounded-xl'>{err}</div>
                 </div>
             </div>
         </div>

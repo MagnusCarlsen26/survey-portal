@@ -68,6 +68,7 @@ const SurveyForm = () => {
                 })
                 setUserName(response.data)
             } catch(error) {
+                alert("You might not be logged in or you might not have survey access. Login here - localhost:3000/login")
                 console.error(error)
             }
         }
@@ -83,7 +84,7 @@ const SurveyForm = () => {
                 option : 'done',
                 payload : { 
                     uuid,
-                    page : "1",
+                    page : "3",
                     form : userResponse
                 }
             });
@@ -95,8 +96,8 @@ const SurveyForm = () => {
                 router.push('/survey/done/1')
             } else if ( result.data === "All questions are compulsory. Please attempt all the questions." ) {
                 alert("All questions are compulsory. Please attempt all the questions.")
-            } else if ( result.data === "Done" ) {                
-                router.push('/survey/done/2')
+            } else if ( result.data === "done" ) {                
+                router.push('/survey/done/thankyou')
             }
         } catch (error) {
 

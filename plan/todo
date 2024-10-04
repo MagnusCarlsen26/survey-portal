@@ -1,37 +1,37 @@
 1.Find solution -The admin manually removing access for the users.✔️
 2.Pending - Architecture of /survey/getQuestions.✔️
-3.Feature - JWT for maintaining session.
+3.Feature - JWT for maintaining session.❌
 4.Show error in UI if the gmail account is not @iitj.ac.in✔️
-5.FIX - Removed lint check in ./firebase and done some weird changes in firebase.json.
-6. FIX - onUserSignup function is in V1. Move it to V2.
+5.FIX - Removed lint check in ./firebase and done some weird changes in firebase.json.❌
+6. FIX - onUserSignup function is in V1. Move it to V2.❌
 7. For dev purpose, firebase rules are all read and write for anyone.
-8.Come with an algorithm to detect mindless answering of questions.
-9. FIX - saving uuid in localstorage for now.
-10. DC - remove repeated reviews.
-11. FIX - use formick in admin/question and survey/doneadm.
+8. Come with an algorithm to detect mindless answering of questions.❌
+9. FIX - saving uuid in localstorage for now.❌
+10. DC - remove repeated reviews.✔️
+11. FIX - use formick in admin/question and survey/doneadm.❌
 12. ADD - option to add pfp in admin/questions.✔️
-13. FEATURE - Who made the question in admin/questions.
+13. FEATURE - Who made the question in admin/questions.❌
 14. FIX - Catch error in client when making API calls.
 15. BUG - Sending 200 status for unauthorized users. make it 401
 16. FEATURE - Extract indiviual questions from questions DB.
-17. FEATURE - Validate the question when admin sets it.
-18. ADD - Show Error to User in admin/questions while saving to DB.
+17. FEATURE - Validate the question when admin sets it.❌
+18. ADD - Show Error to User in admin/questions while saving to DB.✔️
 19. ADD - Allow admin to allow other email domains.
 20. SECURITY - Alert in admin/access.
-21. BUG - FIX expansion of loading buttons.
+21. BUG - FIX expansion of loading buttons.✔️
 22. FEATURE - Edit/DELETE feature in admin/access.
-23. FEATURE - Skeleton UI in /survey.
+23. FEATURE - Skeleton UI in /survey.✔️
 24. CHECK - Testing isAccess function.✔️
 25. ADD - meta tag for each page.
 26. ADD - Optimize for SSR.
-27. FIX - Duplicate records in DB.
+27. FIX - Duplicate records in DB.❌
 28. FIX - white text in edge browser.
 29. ADD - DoctorId field for admin/question.✔️
 30. ADD - Download DB feature for admin.
 31. ADD - Meta Tags , error page for incorrect routes.
 32. FIX - slow animation while hovering on doctors in survey/[page].
 33. FIX - Last doctor in admin/questions cant be edited. ☑️
-34. FIX - distance attribute coming in questions db in first doctor.
+34. FIX - distance attribute coming in questions db in first doctor.❌
 35. FIX - not going back to survey.✔️
 36. ADD - add next button.✔️
 37. ADD - instructions page and required answers for every question.✔️
@@ -43,3 +43,8 @@
 43. FIX - Save dbSecret.json in firebase secrets.
 44. FIX - Save doctor images in bucket.
 45. FIX - Turn off AutoDebit in AWS and GCP.
+46. FIX - Sending incorrect responses for unauthorized access.
+47. ADD - Random non showing of pfp.
+48. FIX - fix the background image.
+49. TEST - responsiveness.
+50. ADD - Some css above next button in survey/questions/[page]
