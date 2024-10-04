@@ -70,6 +70,10 @@ async function done({ uuid, form, page }) {
     try {
         // if (!await checkPrevResponse({ uuid, page : 13, lookupTable : 'response' })) return "Please answer all the survey questions."
         if (!await checkPrevResponse({ uuid, page , lookupTable : 'done' })) return "Please answer all the post survey questions."
+
+        let result
+
+        if (result) return result
         if (!await checkIfExistResponse({ uuid, page, lookupTable : 'done' })) return "You have already attempted the question."
 
         await db.collection('done').add({
@@ -85,6 +89,19 @@ async function done({ uuid, form, page }) {
     }
 }
 
+async function getUserName({ uuid }) {
+    try {
+        const userSnapShot = await db.collection('users').doc(uuid).get();
+        if (userSnapShot.exists) {
+            return userSnapShot.data().name
+        } 
+        return "unauthenticated"
+    } catch(error) {
+        logger.error("Error in getUserName",error)
+        return error
+    }
+}
+
 export const isAccess = onRequest({ cors : true },async(req,res) => {
     const uuid = req.body.data.uuid
     const option = req.body.data.option
@@ -92,6 +109,7 @@ export const isAccess = onRequest({ cors : true },async(req,res) => {
     try {
         const userSnapShot = await db.collection('users').doc(uuid).get();
         if (userSnapShot.exists) {
+            // May be the responses are incorrect 
             if (!userSnapShot.data().isAccess) {
                 res.status(401).send({
                     status : 'UNAUTHENTICATED',
@@ -100,6 +118,7 @@ export const isAccess = onRequest({ cors : true },async(req,res) => {
                 return
             } 
         } else {
+            // May be the responses are incorrect 
             res.status(401).send({
                 status : 'UNAUTHENTICATED',
                 data : "you don't have admin access"
@@ -110,7 +129,8 @@ export const isAccess = onRequest({ cors : true },async(req,res) => {
         if ( option === 'response' ) result = await response(payload)
         else if ( option === 'getQuestion' ) result = await getQuestion(payload)
         else if ( option === 'done' ) result = await done(payload)
-        
+        else if ( option === 'getUserName' ) result = await getUserName(payload)
+
         if (result) {
             res.status(200).send({
                 status : "success",

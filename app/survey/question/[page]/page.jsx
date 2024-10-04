@@ -70,6 +70,7 @@ const Survey = ({ params }) => {
     }]))
     const [lockedChoice,setLockedChoice] = useState(false)
     const [loading,setLoading] = useState(false)
+    const [userName,setUserName] = useState("")
 
     page = params.page
 
@@ -89,8 +90,14 @@ const Survey = ({ params }) => {
                 alert("Your current response won't be considered as you have already attempted the question.")
                 if (parseInt(page,10) === 12) router.push('/survey/done/instructions')
                 else router.push(`/survey/question/${parseInt(page,10) + 1}`)
+            } else if (result.data === "Please submit response for previous quesitons first.") {
+                alert(result.data)
+            } else if (result.data === "response") {
+                if (parseInt(page,10) === 12) router.push('/survey/done/instructions')
+                else router.push(`/survey/question/${parseInt(page,10) + 1}`)
             }
         } catch (error) {
+
         }
         setLoading(false)
     } 
@@ -117,6 +124,19 @@ const Survey = ({ params }) => {
             } catch(error) {
                 console.error(error)
             }
+
+            try {
+                const response = await httpsCallable(functions, 'isAccess')({
+                    uuid,
+                    option : 'getUserName',
+                    payload : {
+                        uuid,
+                    }
+                })
+                setUserName(response.data)
+            } catch(error) {
+                console.error(error)
+            }
         }
         doo()
 
@@ -140,10 +160,7 @@ const Survey = ({ params }) => {
                     </p>
                 
                     <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                        <button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
-                            <span class="sr-only">Open user menu</span>
-                            <img class="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="user photo"/>
-                        </button>
+                        <p className='text-white'>{userName}</p>
                     </div>
                 </div>
             </nav>

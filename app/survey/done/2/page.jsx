@@ -56,9 +56,25 @@ const Survey = () => {
     })
     const [uuid,setUuid] = useState()
     const [loading,setLoading] = useState(false)
-
+    const [userName,setUserName] = useState("")
     useEffect( () => {
         setUuid(localStorage.getItem('userUuid'))
+        console.log
+        const doo = async() => {
+            try {
+                const response = await httpsCallable(functions, 'isAccess')({
+                    uuid : localStorage.getItem('userUuid'),
+                    option : 'getUserName',
+                    payload : {
+                        uuid : localStorage.getItem('userUuid'),
+                    }
+                })
+                setUserName(response.data)
+            } catch(error) {
+                console.error(error)
+            }
+        }
+        doo()
     } ,[])
 
     const onSubmit = async() => {
@@ -81,11 +97,15 @@ const Survey = () => {
             else if ( result.data === "  " ) {
                 alert("Please answer all the previous questions.")
                 router.push('/survey/done/1')
+            }else if ( result.data === "All questions are compulsory. Please attempt all the questions." ) {
+                alert("All questions are compulsory. Please attempt all the questions.")
+            } else if ( result.data === "Done" ) {                
+                router.push('/survey/done/2')
             }
-            router.push('/survey/done/3')
         } catch(error) {
 
         }
+
         setLoading(false)
     }
 
@@ -104,10 +124,7 @@ const Survey = () => {
                     </p>
                 
                     <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                        <button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
-                            <span class="sr-only">Open user menu</span>
-                            <img class="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="user photo"/>
-                        </button>
+                        <p className='text-white'>{userName}</p>
                     </div>
                 </div>
             </nav>

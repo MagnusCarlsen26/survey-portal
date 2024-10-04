@@ -54,9 +54,24 @@ const SurveyForm = () => {
     })
     const [loading,setLoading] = useState(false)
     const [uuid,setUuid] = useState()
-
+    const [userName,setUserName] = useState("")
     useEffect( () => {
         setUuid(localStorage.getItem('userUuid'))
+        const doo = async() => {
+            try {
+                const response = await httpsCallable(functions, 'isAccess')({
+                    uuid : (localStorage.getItem('userUuid')),
+                    option : 'getUserName',
+                    payload : {
+                        uuid : (localStorage.getItem('userUuid')),
+                    }
+                })
+                setUserName(response.data)
+            } catch(error) {
+                console.error(error)
+            }
+        }
+        doo()
     } ,[])
 
     const onSubmit = async() => {
@@ -75,12 +90,14 @@ const SurveyForm = () => {
             if (result.data === "You have already attempted the question.") {
                 alert("Your current response won't be considered as you have already attempted the question.")
                 router.push('/survey/done/thankyou')
-            }
-            else if ( result.data === "  " ) {
+            } else if ( result.data === "  " ) {
                 alert("Please answer all the previous questions.")
                 router.push('/survey/done/1')
+            } else if ( result.data === "All questions are compulsory. Please attempt all the questions." ) {
+                alert("All questions are compulsory. Please attempt all the questions.")
+            } else if ( result.data === "Done" ) {                
+                router.push('/survey/done/2')
             }
-            router.push('/survey/done/thankyou')
         } catch (error) {
 
         }
@@ -102,10 +119,7 @@ const SurveyForm = () => {
                     </p>
                 
                     <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                        <button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
-                            <span class="sr-only">Open user menu</span>
-                            <img class="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="user photo"/>
-                        </button>
+                        <p className='text-white'>{userName}</p>
                     </div>
                 </div>
             </nav>

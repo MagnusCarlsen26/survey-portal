@@ -71,6 +71,8 @@ const Auth = () => {
                     <LoginButton 
                         onClick={signInWithGoogle}
                     />
+                    <br></br>
+                    <p className='text-center'>{err}</p>
                 </div>
             </div>
         </div>

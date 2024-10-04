@@ -66,6 +66,7 @@ const SurveyForm = () => {
     const router = useRouter()
     const [userResponse, setUserResponse] = useState({
         email : "",
+        rollNo : "",
         gender : "",
         age : "",
         familarity : "",
@@ -74,15 +75,30 @@ const SurveyForm = () => {
     const [uuid,setUuid] = useState()
     const [lockedChoice,setLockedChoice] = useState(false)
     const [loading,setLoading] = useState(false)
+    const [userName,setUserName] = useState("")
 
     useEffect( () => {
         setUuid(localStorage.getItem('userUuid'))
+        const doo = async() => {
+            try {
+                const response = await httpsCallable(functions, 'isAccess')({
+                    uuid : localStorage.getItem('userUuid'),
+                    option : 'getUserName',
+                    payload : {
+                        uuid : localStorage.getItem('userUuid'),
+                    }
+                })
+                setUserName(response.data)
+            } catch(error) {
+                console.error(error)
+            }
+        }
+        doo()
     } ,[])
 
     const onSubmit = async() => {
         setLoading(true)
         try {
-
             const result = await httpsCallable(functions, 'isAccess')({
                 uuid,
                 option : 'done',
@@ -95,15 +111,18 @@ const SurveyForm = () => {
             if (result.data === "You have already attempted the question.") {
                 alert("Your current response won't be considered as you have already attempted the question.")
                 router.push('/survey/done/2')
-            }
-            else if ( result.data === "  " ) {
+            } else if ( result.data === "Please answer all the post survey questions." ) {
                 alert("Please answer all the previous questions.")
                 router.push('/survey/done/1')
+            } else if ( result.data === "All questions are compulsory. Please attempt all the questions." ) {
+                alert("All questions are compulsory. Please attempt all the questions.")
+            } else if ( result.data === "Done" ) {                
+                router.push('/survey/done/2')
             }
-            router.push('/survey/done/2')
         } catch(error) {
 
         }
+
         setLoading(false)
     }
         
@@ -121,10 +140,7 @@ const SurveyForm = () => {
                     </p>
                 
                     <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                        <button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
-                            <span class="sr-only">Open user menu</span>
-                            <img class="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="user photo"/>
-                        </button>
+                        <p className='text-white'>{userName}</p>
                     </div>
                 </div>
             </nav>
@@ -134,16 +150,16 @@ const SurveyForm = () => {
                         text={"IIT Jodhpur email id (This is only be used for data linking purposes and will not be shared with anyone) *"} 
                         onChange={(email) => setUserResponse( prev => ({
                                 ...prev,
-                                email : email
+                                email
                             }) 
                         )}
                         type={"text"}
                     />
                     <InputField
                         text={"Roll No ( This is only be used for data linking purposes and will not be shared with anyone) *"} 
-                        onChange={(email) => setUserResponse( prev => ({
+                        onChange={(rollNo) => setUserResponse( prev => ({
                                 ...prev,
-                                email : email
+                                rollNo
                             }) 
                         )}
                         type={"text"}
@@ -162,7 +178,7 @@ const SurveyForm = () => {
                         text={"Age (in nearest years) *"} 
                         onChange={(age) => setUserResponse( prev => ({
                                 ...prev,
-                                age : age
+                                age
                             }) 
                         )}
                         type={"number"}

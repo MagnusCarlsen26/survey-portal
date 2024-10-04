@@ -30,14 +30,16 @@
 30. ADD - Download DB feature for admin.
 31. ADD - Meta Tags , error page for incorrect routes.
 32. FIX - slow animation while hovering on doctors in survey/[page].
-33. FIX - Last doctor in admin/questions can't be edited. 
+33. FIX - Last doctor in admin/questions cant be edited. ☑️
 34. FIX - distance attribute coming in questions db in first doctor.
-
 35. FIX - not going back to survey.✔️
 36. ADD - add next button.✔️
 37. ADD - instructions page and required answers for every question.✔️
-38. ADD - Navbar.
-39. ADD - Add name of user.
-40. ADD - popup for change doctor in survey/1.
-41. ADD - Form validation in survey/done.
+38. ADD - Navbar.✔️
+39. ADD - Add name of user.✔️
+40. ADD - popup for change doctor in survey/1.✔️
+41. ADD - Form validation in survey/done.✔️
 42. FIX - User can navigate to next page in survey/done even if server says please answer previous questions.
+43. FIX - Save dbSecret.json in firebase secrets.
+44. FIX - Save doctor images in bucket.
+45. FIX - Turn off AutoDebit in AWS and GCP.
