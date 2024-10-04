@@ -1,0 +1,94 @@
+{
+    "1": {
+        "heading": "",
+        "questions": [
+            {
+                "inputType": "InputField",
+                "text": "IIT Jodhpur email id (This is only be used for data linking purposes and will not be shared with anyone) *",
+                "attribute": "email",
+                "type": "email"
+            },
+            {
+                "inputType": "InputField",
+                "text": "Roll No ( This is only be used for data linking purposes and will not be shared with anyone) *",
+                "attribute": "rollNo",
+                "type": "text"
+            },
+            {
+                "inputType": "RadioButton",
+                "heading": "Gender *",
+                "options": ["Male", "Female", "Prefer not to say", "Other"],
+                "attribute": "gender"
+            },
+            {
+                "inputType": "InputField",
+                "text": "Age (in nearest years) *",
+                "attribute": "age",
+                "type": "number"
+            },
+            {
+                "inputType": "RadioButton",
+                "heading": "Rate your familiarity with digital health platforms. *",
+                "options": [
+                    "1 (Never used one before.)",
+                    "2", "3", "4",
+                    "5 (Very familiar. Use frequently for yourself or your family.)"
+                ],
+                "attribute": "familarity"
+            },
+            {
+                "inputType": "RadioButton",
+                "heading": "Do you have any doctors in the family *",
+                "options": [ "Yes" , "No" ],
+                "attribute": "isFamilyDoctor"
+            }
+        ]
+    },
+    "2": {
+        "heading": "Doctors in the family",
+        "questions": [
+            {
+                "inputType": "CheckBoxGroup",
+                "heading": "If yes, what is the relationship with this family member? *",
+                "options": [
+                    "Father",
+                    "Mother",
+                    "Brother",
+                    "Sister",
+                    "Other member male",
+                    "Other member female"
+                ],
+                "attribute": "relationshipWithDoctor"
+            }
+        ]
+    },
+    "3": {
+        "heading": "Belief",
+        "questions": [
+            {
+                "inputType": "RadioButton",
+                "heading": "Think of the last time you had to see a doctor. Was it a male or female doctor?",
+                "options": ["Male Doctor", "Female Doctor", "Not seen a doctor ever"],
+                "attribute": "lastTimeWhichDoctor"
+            },
+            {
+                "inputType": "RadioButton",
+                "heading": "Do you think that people in general prefer male doctors over female doctors?*",
+                "options": [ "Yes" , "No" ],
+                "attribute": "doMaleDoctorPrefer"
+            },
+            {
+                "inputType": "RadioButton",
+                "heading": "Do you think that people in general feel male doctors are more skilled than female doctors?",
+                "options": [ "Yes" , "No" ],
+                "attribute": "doMaleDoctorMoreSkilled"
+            },
+            {
+                "inputType": "RadioButton",
+                "heading": "Do you think that people in general feel male doctors are more experienced than female doctors?",
+                "options": [ "Yes" , "No" ],
+                "attribute": "doMaleDoctorMoreExperienced"
+            }
+        ]
+    }
+}

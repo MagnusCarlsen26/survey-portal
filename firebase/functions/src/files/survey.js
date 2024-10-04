@@ -79,6 +79,7 @@ async function done({ uuid, form, page }) {
             }
         })
         if (result) return result
+        if (form == {} ) return "All questions are compulsory. Please attempt all the questions."
         if (!await checkIfExistResponse({ uuid, page, lookupTable : 'done' })) return "You have already attempted the question."
 
         await db.collection('done').add({

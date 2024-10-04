@@ -2,13 +2,13 @@
 "use client"
 
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react';
-import { httpsCallable } from 'firebase/functions';
-import { db,functions } from '@/firebase/confing'
-import { useState } from 'react'
+import { useState, useEffect } from 'react';
+import Navbar from '@/components/Navbar'
+import Spinner from '@/components/svg/Spinner'
+import Arrow from '@/components/svg/Arrow'
+import userServerCall from '@/components/utils/userServerCall'
 
 let page
-let uuid = localStorage.getItem('userUuid')
 
 const DoctorCard = ({ doctor, lockedChoice, setLockedChoice }) => {
 
@@ -53,6 +53,12 @@ const DoctorCard = ({ doctor, lockedChoice, setLockedChoice }) => {
     );
 }
 
+function routeToNextPage(router) {
+
+    if (parseInt(page,10) === 12) router.push('/survey/done/instructions')
+    else router.push(`/survey/question/${parseInt(page,10) + 1}`)
+}
+
 const Survey = ({ params }) => {
 
     const router = useRouter()
@@ -70,50 +76,40 @@ const Survey = ({ params }) => {
     }]))
     const [lockedChoice,setLockedChoice] = useState(false)
     const [loading,setLoading] = useState(false)
-    const [userName,setUserName] = useState("")
 
     page = params.page
 
     const submitResponse = async(responseId) => {
         try {
             setLoading(true)
-            const result = await httpsCallable(functions, 'isAccess')({
-                uuid,
-                option : 'response',
-                payload : { 
-                    uuid,
-                    qid : page,
-                    responseId
-                }
-            });
+
+            result = await userServerCall('response', { 
+                qid : page,
+                responseId
+            },false)
+
             if (result.data === "You have already attempted the question.") {
                 alert("Your current response won't be considered as you have already attempted the question.")
-                if (parseInt(page,10) === 12) router.push('/survey/done/instructions')
-                else router.push(`/survey/question/${parseInt(page,10) + 1}`)
+                routeToNextPage(router)
             } else if (result.data === "Please submit response for previous quesitons first.") {
                 alert(result.data)
             } else if (result.data === "response") {
-                if (parseInt(page,10) === 12) router.push('/survey/done/instructions')
-                else router.push(`/survey/question/${parseInt(page,10) + 1}`)
+                routeToNextPage(router)
             }
         } catch (error) {
-
+            // TODO : Do something about error
         }
         setLoading(false)
     } 
 
     useEffect( () => {
-        console.log(uuid)
         const doo = async() => {
             try {
-                const response = await httpsCallable(functions, 'isAccess')({
-                    uuid,
-                    option : 'getQuestion',
-                    payload : {
-                        uuid,
-                        page,
-                    }
-                })
+                
+                const response = await userServerCall('getQuestion',{
+                    page,
+                },false)
+
                 if (response.data === 'Please attempt previous questions first.') {
                     console.error('Please attempt previous questions first.')
                 } else {
@@ -121,19 +117,6 @@ const Survey = ({ params }) => {
                 }
             } catch(error) {
                 alert("You might not be logged in or you might not have survey access. Login here - localhost:3000/login")
-                console.error(error)
-            }
-
-            try {
-                const response = await httpsCallable(functions, 'isAccess')({
-                    uuid,
-                    option : 'getUserName',
-                    payload : {
-                        uuid,
-                    }
-                })
-                setUserName(response.data)
-            } catch(error) {
                 console.error(error)
             }
         }
@@ -146,54 +129,7 @@ const Survey = ({ params }) => {
             className="bg-cover bg-no-repeat h-full" 
             style={{backgroundImage : 'url(/1.jpg)'}}
         >
-
-            <nav class="bg-black border-gray-200 relative">
-                <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                    <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <svg
-  fill="#00c9cc"
-  width="24px   "
-  height="24px  "
-  viewBox="0 0 512.00 512.00"
-  version="1.1"
-  xmlns="http://www.w3.org/2000/svg"
-  xmlnsXlink="http://www.w3.org/1999/xlink"
-  stroke="#00c9cc"
-  strokeWidth="26.624"
->
-  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-  <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" stroke="#CCCCCC" strokeWidth="3.072"></g>
-  <g id="SVGRepo_iconCarrier">
-    <g id="_x35_94_x2C__Hospital_x2C__medical_x2C__plus">
-      <g>
-        <g>
-          <g>
-            <g>
-              <path d="M326.348,490.956h-140c-5.523,0-10-4.478-10-10v-145h-145c-5.523,0-10-4.478-10-10v-140c0-5.523,4.477-10,10-10h145 v-145c0-5.523,4.477-10,10-10h140c5.522,0,10,4.477,10,10v145h145c5.522,0,10,4.477,10,10v140c0,5.522-4.478,10-10,10h-145v145 C336.348,486.479,331.87,490.956,326.348,490.956z M196.347,470.956h120v-145c0-5.522,4.478-10,10-10h145v-120h-145 c-5.522,0-10-4.477-10-10v-145h-120v145c0,5.523-4.477,10-10,10h-145v120h145c5.523,0,10,4.478,10,10V470.956z"></path>
-            </g>
-            <g>
-              <path d="M286.348,450.956h-60c-5.523,0-10-4.478-10-10v-140h-150c-5.523,0-10-4.478-10-10v-70c0-5.523,4.477-10,10-10h150v-140 c0-5.523,4.477-10,10-10h60c5.522,0,10,4.477,10,10v140h150c5.522,0,10,4.477,10,10v70c0,5.522-4.478,10-10,10h-150v140 C296.348,446.479,291.87,450.956,286.348,450.956z M236.347,430.956h40v-140c0-5.522,4.478-10,10-10h150v-50h-150 c-5.522,0-10-4.477-10-10v-140h-40v140c0,5.523-4.477,10-10,10h-150v50h150c5.523,0,10,4.478,10,10V430.956z"></path>
-            </g>
-          </g>
-        </g>
-      </g>
-    </g>
-    <g id="Layer_1"></g>
-  </g>
-</svg>
-
-                        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">MySwasthya</span>
-                    </a>
-                    
-                    <p class="text-blue-300 text-center absolute inset-0 flex justify-center items-center text-xl">
-                        Choice Set {page}
-                    </p>
-                
-                    <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                        <p className='text-white'>{userName}</p>
-                    </div>
-                </div>
-            </nav>
+            <Navbar heading={`Choice set ${page}`} />
 
             <br></br>
             <div className="flex items-center justify-center px-12">
@@ -220,19 +156,10 @@ const Survey = ({ params }) => {
                                 type="button" 
                                 class="bg-green-600 text-white rounded-r-md py-2 border-l border-gray-200 hover:bg-green-800 hover:text-white px-3"
                                 onClick={() => submitResponse(lockedChoice.responseId)}
-                            
                             >
                             <div class="flex flex-row align-middle">
                                 <span class="mr-2 text-base">Next</span>
-                                {loading ? 
-                                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
-                                        <g transform="rotate(0 50 50)"><circle cx="50" cy="50" r="40" stroke="#fff" stroke-width="8" fill="none"><animate attributeName="stroke-dasharray" values="0, 200; 100, 200; 200, 200" dur="1.5s" repeatCount="indefinite"/><animate attributeName="stroke-dashoffset" values="0; -40; -100" dur="1.5s" repeatCount="indefinite" /></circle></g>
-                                    </svg> 
-                                    : 
-                                    <svg class="w-5 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                    </svg>
-                                }
+                                { loading ? <Spinner /> : <Arrow /> }
 
                             </div>
                             </button>

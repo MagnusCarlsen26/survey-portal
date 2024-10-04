@@ -48,3 +48,5 @@
 48. FIX - fix the background image.
 49. TEST - responsiveness.
 50. ADD - Some css above next button in survey/questions/[page]
+51. BUG - Need to login 2 times, 
+52. ADD - Mechanism to mark surveyStatus : True.
