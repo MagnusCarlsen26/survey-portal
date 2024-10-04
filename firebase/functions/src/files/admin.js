@@ -1,9 +1,8 @@
-import {onRequest} from "firebase-functions/v2/https";
+import { onRequest } from "firebase-functions/v2/https";
 import { db } from './../config.js'
 import { logger } from "firebase-functions";
 import fs from 'fs'
 import csvWriter from 'csv-write-stream'
-import { DateTime } from 'luxon'
 import { exec } from 'child_process'
 import archiver from 'archiver';
 import { Readable } from 'stream';

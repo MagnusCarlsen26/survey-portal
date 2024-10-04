@@ -46,7 +46,11 @@ const Auth = () => {
             className="flex h-screen w-full items-center justify-center bg-cover bg-no-repeat"
             style={{backgroundImage : 'url(/1.jpg)'}}
         >
-            <div className="rounded-xl bg-slate-50 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
+            <div 
+                className="rounded-xl bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8"
+                style={{backgroundColor : "#ffffff20"}}
+            >
+
                 <div className="text-white">
                     <div className="mb-8 flex flex-col items-center">
                         <img src="https://erp.iitj.ac.in/favicon.ico" width="150" alt="" />

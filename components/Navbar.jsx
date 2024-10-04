@@ -1,10 +1,8 @@
 "use client"
 
 import OrgLogo from "@/components/svg/OrgLogo"
-import { useEffect } from 'react';
-import { httpsCallable } from 'firebase/functions';
-import { functions } from '@/firebase/confing'
-import { useState } from 'react'
+import { useState, useEffect } from 'react';
+import userServerCall from "./utils/userServerCall";
 
 const Navbar = ({ heading }) => {
 
@@ -13,13 +11,7 @@ const Navbar = ({ heading }) => {
     useEffect( () => {
         const doo = async() => {
             try {
-                const response = await httpsCallable(functions, 'isAccess')({
-                    uuid,
-                    option : 'getUserName',
-                    payload : {
-                        uuid,
-                    }
-                })
+                const response = await userServerCall('getUserName',{},false)
                 setUserName(response.data)
             } catch(error) {
                 console.error(error)
@@ -30,7 +22,7 @@ const Navbar = ({ heading }) => {
     } , [] )
 
     return (
-        <nav class="bg-black border-gray-200 relative">
+        <nav class="sticky top-0 left-0 right-0 bg-black border-gray-200">
             <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
                     <OrgLogo />

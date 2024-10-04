@@ -12,7 +12,7 @@ const Instructions = () =>{
             style={{backgroundImage : 'url(/1.jpg)'}}
         >
             <div className="flex flex-col items-center justify-between min-h-screen p-16">
-                <h1 className="text-6xl">Instructions</h1>
+                <h1 className="text-4xl instructions-card">Instructions</h1>
                 <div className="instructions-card">
                     <p>
                         1. Check the exam timetable carefully. Make sure you know the time and locations

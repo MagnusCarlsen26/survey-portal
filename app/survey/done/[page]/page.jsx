@@ -41,7 +41,7 @@ const SurveyForm = ({ params }) => {
         
     return (
         <div
-            className="h-screen w-full items-center justify-center bg-cover bg-no-repeat"
+            className="bg-fixed w-full bg-cover"
             style={{backgroundImage : 'url(/1.jpg)'}}
         >
             <Navbar heading={"Post Experiment Survey"} />

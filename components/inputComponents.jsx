@@ -1,4 +1,9 @@
+import { useEffect } from "react"
+
 export function InputField({text, onChange, type}) {
+    useEffect( () => {
+        onChange("")
+    },[])
     return (
         <div className="w-full max-w-sm min-w-[200px] mt-4">
             <label className="block mb-1 text-sm text-black font-bold">
@@ -15,7 +20,6 @@ export function InputField({text, onChange, type}) {
 }
 
 export function CheckboxGroup({ heading, options, onChange }) {
-
     return (
         <>
             <p className='font-bold'>{heading}</p>
@@ -52,7 +56,9 @@ export function CheckboxGroup({ heading, options, onChange }) {
 
 
 export function RadioButton({ heading, options, onChange }) {
-
+    useEffect( () => {
+        onChange("")
+    },[])
     return (
         <>
             <p className='font-bold'>{heading}</p>

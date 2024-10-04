@@ -43,10 +43,12 @@
 43. FIX - Save dbSecret.json in firebase secrets.
 44. FIX - Save doctor images in bucket.
 45. FIX - Turn off AutoDebit in AWS and GCP.
-46. FIX - Sending incorrect responses for unauthorized access.
-47. ADD - Random non showing of pfp.
-48. FIX - fix the background image.
+46. FIX - Sending incorrect responses for unauthorized access.✔️
+47. ADD - Random non showing of pfp.✔️
+48. FIX - fix the background image.✔️
 49. TEST - responsiveness.
-50. ADD - Some css above next button in survey/questions/[page]
+50. ADD - Some css above next button in survey/questions/[page].✔️
 51. BUG - Need to login 2 times, 
-52. ADD - Mechanism to mark surveyStatus : True.
+52. ADD - Mechanism to mark surveyStatus : True.✔️
+53. Fix - Radio buttons and NavBar dont have CSS.✔️
+54. ADD - Transfer the CSS to /admin.

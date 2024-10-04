@@ -113,6 +113,9 @@ const Survey = ({ params }) => {
                 if (response.data === 'Please attempt previous questions first.') {
                     console.error('Please attempt previous questions first.')
                 } else {
+                    if ( Math.random() < 0.2 ) {
+                        response.data.doctors[Math.floor(Math.random() * 5).pfp = ""
+                    }
                     setDoctors(prev => response.data.doctors)
                 }
             } catch(error) {
@@ -125,8 +128,8 @@ const Survey = ({ params }) => {
     } , [] )
     
     return (
-        <div 
-            className="bg-cover bg-no-repeat h-full" 
+        <div
+            className="bg-fixed w-full h-full bg-cover"
             style={{backgroundImage : 'url(/1.jpg)'}}
         >
             <Navbar heading={`Choice set ${page}`} />
@@ -151,7 +154,9 @@ const Survey = ({ params }) => {
                 {lockedChoice && 
                     <div className='flex items-center justify-center'>
                         <div>
-                            <p>{lockedChoice?.doctorName}</p>
+                            <div className='bg-white rounded-r-md py-2 border-l px-3'>
+                                <p>{lockedChoice?.doctorName}</p>
+                            </div>
                             <button 
                                 type="button" 
                                 class="bg-green-600 text-white rounded-r-md py-2 border-l border-gray-200 hover:bg-green-800 hover:text-white px-3"

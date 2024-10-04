@@ -79,7 +79,7 @@ async function done({ uuid, form, page }) {
             }
         })
         if (result) return result
-        if (form == {} ) return "All questions are compulsory. Please attempt all the questions."
+        if (Object.keys(form).length === 0) return "All questions are compulsory. Please attempt all the questions."
         if (!await checkIfExistResponse({ uuid, page, lookupTable : 'done' })) return "You have already attempted the question."
 
         await db.collection('done').add({
@@ -108,6 +108,26 @@ async function getUserName({ uuid }) {
     }
 }
 
+async function surveyCompleted({ uuid }) {
+    try {
+        if (!await checkPrevResponse({ uuid, page : 13, lookupTable : 'response' })) return "Please answer all the survey questions."
+        if (!await checkPrevResponse({ uuid, page : 4 , lookupTable : 'done' })) return "Please answer all the post survey questions."
+
+        let docRef = db.collection('users').doc(uuid);
+        docRef.update({
+            surveyStatus : true,
+            isAccess : false,
+            completedAt : Date.now()
+        })
+
+        return "You have completed the survey !!"
+
+    } catch ( error ) {
+        logger.error(error)
+        return error
+    }
+}
+
 export const isAccess = onRequest({ cors : true },async(req,res) => {
     const uuid = req.body.data.uuid
     const option = req.body.data.option
@@ -119,7 +139,7 @@ export const isAccess = onRequest({ cors : true },async(req,res) => {
             if (!userSnapShot.data().isAccess) {
                 res.status(401).send({
                     status : 'UNAUTHENTICATED',
-                    data : "you don't have admin access"
+                    data : "you don't have access to survey"
                 })
                 return
             } 
@@ -127,7 +147,7 @@ export const isAccess = onRequest({ cors : true },async(req,res) => {
             // May be the responses are incorrect 
             res.status(401).send({
                 status : 'UNAUTHENTICATED',
-                data : "you don't have admin access"
+                data : "No user found."
             })
             return
         }
@@ -136,12 +156,12 @@ export const isAccess = onRequest({ cors : true },async(req,res) => {
         else if ( option === 'getQuestion' ) result = await getQuestion(payload)
         else if ( option === 'done' ) result = await done(payload)
         else if ( option === 'getUserName' ) result = await getUserName(payload)
-
+        else if ( option === 'surveyCompleted' ) result = await surveyCompleted(payload)
+        
         if (result) {
             res.status(200).send({
                 status : "success",
                 data : result,
-
             })
         } else {
             res.status(400).send({ 
