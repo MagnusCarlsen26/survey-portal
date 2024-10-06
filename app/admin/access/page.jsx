@@ -4,6 +4,7 @@ import { httpsCallable } from 'firebase/functions';
 import { db,functions } from '@/firebase/confing'
 import { useEffect, useState } from 'react';
 import { TiTick } from "react-icons/ti";
+import Navbar  from '@/components/Navbar'
 
 function Fetching () {
     return (
@@ -84,10 +85,14 @@ const Access = () => {
     } ,[])
 
     return (
-        <div className="bg-gray-900 bg-cover bg-no-repeat h-full" style={{backgroundImage : 'url("https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80")'}}>
+        <div
+            className="bg-fixed w-full h-full bg-cover"
+            style={{backgroundImage : 'url(/1.jpg)'}}
+        >
+            <Navbar heading = {"Access Manager"}/>
             <div className="flex items-center justify-between h-full p-16">
                 <div>
-                    <div>
+                    <div className='instructions-card'>
                         {
                             listAccess.map( (email,index) => (
                                 <div className='flex' key={index}>
@@ -103,7 +108,7 @@ const Access = () => {
                     />
                 </div>
                 <div>
-                    <div>
+                    <div className='instructions-card'>
                         {
                             grantEmails.map( (email,index) => (
                                 <div className='flex' key={index}>
@@ -139,7 +144,7 @@ const Access = () => {
                     />
                 </div>
                 <div>
-                    <div>
+                    <div className='instructions-card'>
                         {
                             removeEmails.map( (email,index) => (
                                 <div className='flex' key={index}>

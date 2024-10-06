@@ -1,10 +1,10 @@
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '@/firebase/confing'
 
-const uuid = localStorage.getItem('userUuid')
-
 export async function userServerCall( option, payload, isAdmin ) {
-    return await httpsCallable(functions, isAdmin ? 'isAdminAccess' : 'isAccess')({
+    const uuid = localStorage.getItem('userUuid')
+
+    const result =  await httpsCallable(functions, isAdmin ? 'isAdminAccess' : 'isAccess')({
         uuid,
         option,
         payload : {
@@ -12,6 +12,8 @@ export async function userServerCall( option, payload, isAdmin ) {
             uuid
         }
     });
+    console.log(result)
+    return result
 }
 
 export default userServerCall

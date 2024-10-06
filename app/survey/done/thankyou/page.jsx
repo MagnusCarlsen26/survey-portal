@@ -23,6 +23,7 @@ const Survey = () => {
         >
             <br></br>
             <h1 className='text-center'>Thankyou</h1>
+            <p></p>
 
         </div>
     );

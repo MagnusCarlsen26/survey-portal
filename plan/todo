@@ -29,7 +29,7 @@
 29. ADD - DoctorId field for admin/question.✔️
 30. ADD - Download DB feature for admin.
 31. ADD - Meta Tags , error page for incorrect routes.
-32. FIX - slow animation while hovering on doctors in survey/[page].
+32. FIX - slow animation while hovering on doctors in survey/[page].✔️
 33. FIX - Last doctor in admin/questions cant be edited. ☑️
 34. FIX - distance attribute coming in questions db in first doctor.❌
 35. FIX - not going back to survey.✔️
@@ -40,7 +40,7 @@
 40. ADD - popup for change doctor in survey/1.✔️
 41. ADD - Form validation in survey/done.✔️
 42. FIX - User can navigate to next page in survey/done even if server says please answer previous questions.
-43. FIX - Save dbSecret.json in firebase secrets.
+43. FIX - Save dbSecret.json in firebase secrets.❌
 44. FIX - Save doctor images in bucket.
 45. FIX - Turn off AutoDebit in AWS and GCP.
 46. FIX - Sending incorrect responses for unauthorized access.✔️
@@ -48,7 +48,24 @@
 48. FIX - fix the background image.✔️
 49. TEST - responsiveness.
 50. ADD - Some css above next button in survey/questions/[page].✔️
-51. BUG - Need to login 2 times, 
+51. BUG - Need to login 2 times, ☑️
 52. ADD - Mechanism to mark surveyStatus : True.✔️
 53. Fix - Radio buttons and NavBar dont have CSS.✔️
-54. ADD - Transfer the CSS to /admin.
+54. ADD - Transfer the CSS to /admin.✔️
+55. DO - Full Testing
+56. Deployment✔️
+57. Background image not full screen in admin/question.✔️
+58. If there is error in admin/question it isnt shown. Also beautify server resposne.
+59. Change redirect link in alert("").
+60. Authenticated alert in survey/done/[page].
+61. UI not proper in chrome non full screen.✔️
+62. Show error when questions can''t be displayed in survey/[page].
+63. Disable next button if questions aren''t loaded. ❌
+64. Add password for downloading DB
+65. done.csv is completely incorrect.
+66. Give access of firebase to mam.
+
+Download Database - http://13.127.77.140:3000/downloadDB
+Website - https://survey-portal.vercel.app/login
+Admin - https://survey-portal.vercel.app/admin
+Login as dweepobotee@iitj.ac.in - localStorage.setItem("userUuid","iXP6i34xJ4bLAnLqWzPtovlmTtu2")

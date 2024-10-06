@@ -54,7 +54,7 @@ const DoctorCard = ({ doctor, lockedChoice, setLockedChoice }) => {
 }
 
 function routeToNextPage(router) {
-
+    console.log(parseInt(page,10))
     if (parseInt(page,10) === 12) router.push('/survey/done/instructions')
     else router.push(`/survey/question/${parseInt(page,10) + 1}`)
 }
@@ -83,11 +83,10 @@ const Survey = ({ params }) => {
         try {
             setLoading(true)
 
-            result = await userServerCall('response', { 
+            const result = await userServerCall('response', { 
                 qid : page,
                 responseId
             },false)
-
             if (result.data === "You have already attempted the question.") {
                 alert("Your current response won't be considered as you have already attempted the question.")
                 routeToNextPage(router)
@@ -97,6 +96,7 @@ const Survey = ({ params }) => {
                 routeToNextPage(router)
             }
         } catch (error) {
+            console.error(error)
             // TODO : Do something about error
         }
         setLoading(false)
@@ -105,37 +105,38 @@ const Survey = ({ params }) => {
     useEffect( () => {
         const doo = async() => {
             try {
-                
                 const response = await userServerCall('getQuestion',{
                     page,
                 },false)
 
                 if (response.data === 'Please attempt previous questions first.') {
                     console.error('Please attempt previous questions first.')
+                    alert("Please attempt previous questions first.")
                 } else {
-                    if ( Math.random() < 0.2 ) {
-                        response.data.doctors[Math.floor(Math.random() * 5).pfp = ""
-                    }
+                    // if ( Math.random() < 1 ) {
+                    //     response.data.doctors[Math.floor(Math.random() * 5)].pfp = ""
+                    // }
                     setDoctors(prev => response.data.doctors)
                 }
             } catch(error) {
-                alert("You might not be logged in or you might not have survey access. Login here - localhost:3000/login")
+                alert("You might not be logged in or you might not have survey access. Login here - https://survey-portal.vercel.app/login")
                 console.error(error)
             }
         }
+        setLoading(true)
         doo()
-
+        setLoading(false)
     } , [] )
     
     return (
         <div
-            className="bg-fixed w-full h-full bg-cover"
+            className="bg-fixed w-full min-h-screen bg-cover"
             style={{backgroundImage : 'url(/1.jpg)'}}
         >
             <Navbar heading={`Choice set ${page}`} />
 
             <br></br>
-            <div className="flex items-center justify-center px-12">
+            <div className="flex items-center justify-center px-12" style={{zIndex : "-1"}}>
                 <div>
                     <div className="flex">
                         <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[0]} />
@@ -159,8 +160,9 @@ const Survey = ({ params }) => {
                             </div>
                             <button 
                                 type="button" 
-                                class="bg-green-600 text-white rounded-r-md py-2 border-l border-gray-200 hover:bg-green-800 hover:text-white px-3"
+                                class="bg-green-600 text-white disabled: rounded-r-md py-2 border-l border-gray-200 hover:bg-green-800 hover:text-white px-3"
                                 onClick={() => submitResponse(lockedChoice.responseId)}
+                                disabled = { loading }
                             >
                             <div class="flex flex-row align-middle">
                                 <span class="mr-2 text-base">Next</span>

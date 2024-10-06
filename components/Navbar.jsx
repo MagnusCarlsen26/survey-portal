@@ -7,7 +7,7 @@ import userServerCall from "./utils/userServerCall";
 const Navbar = ({ heading }) => {
 
     const [ userName,setUserName ] = useState("")
-
+    
     useEffect( () => {
         const doo = async() => {
             try {
@@ -22,7 +22,7 @@ const Navbar = ({ heading }) => {
     } , [] )
 
     return (
-        <nav class="sticky top-0 left-0 right-0 bg-black border-gray-200">
+        <nav class="sticky top-0 left-0 right-0 bg-black border-gray-200" style={{zIndex : "1"}}>
             <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
                     <OrgLogo />

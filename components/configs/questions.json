@@ -24,7 +24,7 @@
                 "inputType": "InputField",
                 "text": "Age (in nearest years) *",
                 "attribute": "age",
-                "type": "number"
+                "type": "text"
             },
             {
                 "inputType": "RadioButton",

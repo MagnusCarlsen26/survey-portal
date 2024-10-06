@@ -5,11 +5,16 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import Navbar from '@/components/Navbar'
 import { RadioButton, InputField, CheckboxGroup} from '@/components/inputComponents'
-import routeNextDonePage from '@/components/utils/routeNextDonePage'
+// import routeNextDonePage from '@/components/utils/routeNextDonePage'
 import userServerCall from '@/components/utils/userServerCall'
 import { useRouter } from 'next/navigation';
 import questions from '@/components/configs/questions.json'
 import Spinner from '@/components/svg/Spinner'
+
+function returnThankyou( currPage ) {
+    if ( currPage == 3 ) return 'thankyou'
+    else return currPage + 1
+}
 
 const SurveyForm = ({ params }) => {
 
@@ -31,10 +36,26 @@ const SurveyForm = ({ params }) => {
                 form : userResponse,
             },false)
 
-            routeNextDonePage(result,page,router)
+            const currPage = parseInt( page,10 )
+    
+            if (result.data === "You have already attempted the question.") {
+                alert("Your current response won't be considered as you have already attempted the question.")
+                router.push(`/survey/done/${returnThankyou( currPage )}`)
+            } else if ( result.data === "Please answer all the post survey questions." ) {
+                alert("Please answer all the previous questions.")
+                router.push('/survey/done/1')
+            } else if ( result.data === "Please answer all the survey questions." ) {
+                alert("Please answer all the previous questions.")
+                router.push('/survey/done/1')
+            } else if ( result.data === "All questions are compulsory. Please attempt all the questions." ) {
+                alert("All questions are compulsory. Please attempt all the questions.")
+            } else if ( result.data === "done" ) {                
+                router.push(`/survey/done/${returnThankyou( currPage )}`)
+            }
+
         } catch(error) {
             console.error(error)
-            // TODO : Handle error
+            alert("You might not be logged in or you might not have survey access. Login here - https://survey-portal.vercel.app/login")
         }
         setLoading(false)
     }

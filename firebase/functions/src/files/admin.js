@@ -86,19 +86,28 @@ async function setQuestion({ page, doctors }) {;
     }
 }
 
+const csvWriter = require('csv-write-stream');
+const { PassThrough } = require('stream');
+
 function generateCsv(headers, rows) {
     const writer = csvWriter({ headers });
-    const stream = new Readable();
-    stream._read = () => {};  // No-op for read stream
-    writer.pipe(stream);
+    const passThrough = new PassThrough();
 
+    // Pipe the writable csvWriter into the PassThrough stream
+    writer.pipe(passThrough);
+
+    // Write each row to the csvWriter
     rows.forEach(row => {
         writer.write(row);
     });
 
+    // End the csvWriter stream
     writer.end();
-    return stream;
+
+    // Return the PassThrough stream, which is readable
+    return passThrough;
 }
+
 
 export const download = onRequest({ cors : true },async(req,res) => {
     try {

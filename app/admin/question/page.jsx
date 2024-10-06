@@ -3,7 +3,7 @@
 import { db,functions } from '@/firebase/confing'
 import { httpsCallable } from 'firebase/functions';
 import { useEffect, useState } from 'react';
-
+import Navbar from '@/components/Navbar';
 function InputField({text,onChange,value}) {
     return (
         <div className="w-72 p-2">
@@ -126,7 +126,11 @@ const Question = () => {
     };
     
     return (
-        <div className="bg-gray-900 bg-cover bg-no-repeat h-full" style={{backgroundImage : 'url("https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80")'}}>
+        <div
+            className="bg-fixed w-full min-h-screen bg-cover"
+            style={{backgroundImage : 'url(/1.jpg)'}}
+        >
+            <Navbar heading={"Create Questions"}/>
             <div className='flex flex-col items-center'>
                 <br/>
                 <div className='flex'>
