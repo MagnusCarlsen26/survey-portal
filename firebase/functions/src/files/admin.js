@@ -1,11 +1,7 @@
 import { onRequest } from "firebase-functions/v2/https";
 import { db } from './../config.js'
 import { logger } from "firebase-functions";
-import fs from 'fs'
-import csvWriter from 'csv-write-stream'
-import { exec } from 'child_process'
-import archiver from 'archiver';
-import { Readable } from 'stream';
+import {bucket} from "./../config.js"
 
 async function listAccess() {
     try {
@@ -72,12 +68,26 @@ async function removeAccess({ emails }) {
 }
 
 async function setQuestion({ page, doctors }) {;
-    logger.info(page)
     try {
         const doctorsRef = db.collection('questions').doc(page)
         await doctorsRef.set({
             doctors
         })
+        // const uploadPromises = doctors.map( async (doctor) => {
+        //     const imageUrl = await testBucket(doctor.pfp, doctor.id);
+        //     return { ...doctor, imageUrl }; // Return the original data along with the image URL
+        // });
+
+        // const uploadedImages = await Promise.all(uploadPromises)
+
+        // const doctorsWithoutPfp = uploadedImages.map( ({imageUrl,pfp,...doctor}) => ({
+        //     ...doctor,
+        //     pfp : imageUrl
+        // }) )
+
+        // await doctorsRef.set({
+        //     doctors : doctorsWithoutPfp
+        // })
         logger.info("Successfully saved doctors list.");
         return 'Done'
     } catch (error) {
@@ -86,142 +96,71 @@ async function setQuestion({ page, doctors }) {;
     }
 }
 
-const csvWriter = require('csv-write-stream');
-const { PassThrough } = require('stream');
+async function testBucket(binaryImage, destination) {
+    return new Promise((resolve, reject) => {
+        try {
+            const file = bucket.file(destination);
+            const stream = file.createWriteStream({ metadata: { contentType: 'image/jpeg' } });
 
-function generateCsv(headers, rows) {
-    const writer = csvWriter({ headers });
-    const passThrough = new PassThrough();
+            stream.on('error', (error) => {
+                logger.error('Error uploading file:', error);
+                reject(error); // Reject the promise on error
+            });
 
-    // Pipe the writable csvWriter into the PassThrough stream
-    writer.pipe(passThrough);
+            stream.on('finish', () => {
+                logger.info('File uploaded successfully!');
+                const publicUrl = `https://storage.googleapis.com/${bucket.name}/${destination}`; // Construct the URL
+                resolve(publicUrl); // Resolve the promise with the image URL
+            });
 
-    // Write each row to the csvWriter
-    rows.forEach(row => {
-        writer.write(row);
+            stream.end(binaryImage);
+        } catch (error) {
+            logger.error('Error uploading file:', error);
+            reject(error); // Reject the promise on error
+        }
     });
-
-    // End the csvWriter stream
-    writer.end();
-
-    // Return the PassThrough stream, which is readable
-    return passThrough;
 }
 
-
-export const download = onRequest({ cors : true },async(req,res) => {
+async function denyPhoto({ emails }) {
     try {
-        const command = 'npx -p node-firestore-import-export firestore-export -a db/dbSecret.json -b db/backup.json';
+        emails.forEach( async(email) => {
+            await db.runTransaction( async(t) => {
+                let userSnapshot = await db.collection('users').where("email", "==", email).get();
 
-        exec(command, (error, stdout, stderr) => {
-            if (error) {
-                logger.error(`Error: ${error.message}`);
-                return res.status(500).send('Failed to export Firestore data');
-            }
-            if (stderr) {
-                logger.error(`Stderr: ${stderr}`);
-                return res.status(500).send(stderr);
-            }
-            logger.info(`Output: ${stdout}`);
-
-            // Read the exported Firestore data from the backup file
-            fs.readFile('db/backup.json', 'utf8', (err, data) => {
-                if (err) {
-                    logger.error('Error reading the file:', err);
-                    return res.status(500).send('Error reading backup data');
+                let userUuid;
+                if (!userSnapshot.empty) {
+                    userSnapshot.forEach(doc => {
+                        userUuid = doc.data().uuid;
+                    });
+                } else {
+                    logger.info("No user found with the given email.");
                 }
-
-                const jsonData = JSON.parse(data);
-
-                // Prepare the zip archive
-                const archive = archiver('zip');
-                res.setHeader('Content-Disposition', 'attachment; filename=backup.zip');
-                res.setHeader('Content-Type', 'application/zip');
-                archive.pipe(res);
-
-                // Generate and append CSV files to the zip
-
-                // Users CSV
-                const usersHeaders = ['uuid', 'email', 'name', 'isAccess', 'surveyStatus', 'cat'];
-                const users = jsonData.__collections__.users || {};
-                const usersRows = Object.keys(users).map(uuid => [
-                    users[uuid].uuid,
-                    users[uuid].email,
-                    users[uuid].name,
-                    users[uuid].isAccess,
-                    users[uuid].surveyStatus,
-                    users[uuid].cat
-                ]);
-                const usersStream = generateCsv(usersHeaders, usersRows);
-                archive.append(usersStream, { name: 'users.csv' });
-
-                // Admins CSV
-                const adminsHeaders = ['email'];
-                const admins = jsonData.__collections__.admins || {};
-                const adminsRows = Object.keys(admins).map(uuid => [
-                    admins[uuid].email
-                ]);
-                const adminsStream = generateCsv(adminsHeaders, adminsRows);
-                archive.append(adminsStream, { name: 'admins.csv' });
-
-                // Done CSV
-                const doneHeaders = ['uuid', 'q1', 'q2', 'q3', 'q4', 'q5', 'cat'];
-                const done = jsonData.__collections__.done || {};
-                const doneRows = Object.keys(done).map(docuId => [
-                    done[docuId].uuid,
-                    done[docuId].form.q1,
-                    done[docuId].form.q2,
-                    done[docuId].form.q3,
-                    done[docuId].form.q4,
-                    done[docuId].form.q5,
-                    done[docuId].cat
-                ]);
-                const doneStream = generateCsv(doneHeaders, doneRows);
-                archive.append(doneStream, { name: 'done.csv' });
-
-                // Questions CSV
-                const questionsHeaders = ['page', 'doctorId1', 'doctorId2', 'doctorId3', 'doctorId4', 'doctorId5', 'doctorId6'];
-                const questions = jsonData.__collections__.questions || {};
-                const questionsRows = Object.keys(questions).map(page => [
-                    page,
-                    questions[page].doctors[0].id,
-                    questions[page].doctors[1].id,
-                    questions[page].doctors[2].id,
-                    questions[page].doctors[3].id,
-                    questions[page].doctors[4].id,
-                    questions[page].doctors[5].id
-                ]);
-                const questionsStream = generateCsv(questionsHeaders, questionsRows);
-                archive.append(questionsStream, { name: 'questions.csv' });
-
-                // Response CSV
-                const responseHeaders = ['uuid', 'responseId', 'qid', 'cat'];
-                const response = jsonData.__collections__.response || {};
-                const responseRows = Object.keys(response).map(id => [
-                    response[id].uuid,
-                    response[id].responseId,
-                    response[id].qid,
-                    response[id].cat
-                ]);
-                const responseStream = generateCsv(responseHeaders, responseRows);
-                archive.append(responseStream, { name: 'response.csv' });
-
-                console.log("Hi")
-                archive.finalize().then(() => {
-                    logger.info('Zip file created and sent successfully');
-                }).catch(err => {
-                    logger.error('Error finalizing archive:', err);
-                    res.status(500).send('Error creating zip file');
-                });
-            });
-        });
+                let userDoc = await t.get(db.collection("users").doc(userUuid));
+                let currentIsDenyPhoto = userDoc.data().isDenyPhoto;
+                t.update(db.collection("users").doc(userUuid), { isDenyPhoto : !currentIsDenyPhoto} )
+            })
+        } )
+        return "denyPhoto"
     } catch (error) {
-        logger.error(error);
-        res.status(500).send('Internal server error');
+        logger.error(error)
+        return error
     }
-})
+}
 
-export const isAdminAccess = onRequest({ cors : true },async(req,res) => {
+async function setPostSurveyQuestion(question,page) {
+    try {
+        const doctorsRef = db.collection('postSurveyQuestions').doc(page)
+        await doctorsRef.set({
+            question
+        })
+        return 'Done'
+    } catch (error) {
+        logger.error("Error saving doctors list:", error);
+        return error
+    }
+}
+
+export const isAdminAccess = onRequest({ cors : true , minInstances: 0 },async(req,res) => {
     const uuid = req.body.data.uuid
     const option = req.body.data.option
     const payload = req.body.data.payload
@@ -252,8 +191,8 @@ export const isAdminAccess = onRequest({ cors : true },async(req,res) => {
         else if ( option === 'listAccess' ) result = await listAccess(payload)
         else if ( option === 'grantAccess' ) result = await grantAccess(payload)
         else if ( option === 'removeAccess' ) result = await removeAccess(payload)
+        else if ( option === 'denyPhoto' ) result = await denyPhoto(payload)
         else if ( option === 'download' ) result = await download(payload)
-
         logger.info(result)
         if (result) {
             res.status(200).send({

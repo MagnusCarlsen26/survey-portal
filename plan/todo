@@ -62,10 +62,27 @@
 62. Show error when questions can''t be displayed in survey/[page].
 63. Disable next button if questions aren''t loaded. ❌
 64. Add password for downloading DB
-65. done.csv is completely incorrect.
-66. Give access of firebase to mam.
+65. Give access of firebase to mam.✔️
+66. done.csv is completely incorrect.✔️
+67. Integrate downloadDB link with /admin.✔️
+68. dont show skeleton UI to users who don''t have access.✔️
+69. Show Time stamp in human readable form and save time to attempt question.✔️
+70. Think about randomising.✔️
+71. Next week - Demonstration with real data of doctors.
+72. Figure out a way to Transfer the project to admin (dweepobotee@iitj.ac.in)
+73. Do something about Elastic IP of downloadDB
+74. Way to calculate time to attempt question is vulnerable to attack.
+75. Perfomance analysis.
+76. Change done to postSurveyAnswers.
+77. Loading spinner.
+78. PhotoShop the background
+79. Randomising images✔️
+80. Show u dont have access in center of page.
+81. Verify functionality of timestamp.✔️
+82. basic meta tag.✔️
+83. Modified minInstances to 1.✔️
 
-Download Database - http://13.127.77.140:3000/downloadDB
+Download Database - http://43.204.110.108:3000/downloadDB
 Website - https://survey-portal.vercel.app/login
 Admin - https://survey-portal.vercel.app/admin
 Login as dweepobotee@iitj.ac.in - localStorage.setItem("userUuid","iXP6i34xJ4bLAnLqWzPtovlmTtu2")

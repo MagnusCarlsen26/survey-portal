@@ -8,7 +8,6 @@ import { RadioButton, InputField, CheckboxGroup} from '@/components/inputCompone
 // import routeNextDonePage from '@/components/utils/routeNextDonePage'
 import userServerCall from '@/components/utils/userServerCall'
 import { useRouter } from 'next/navigation';
-import questions from '@/components/configs/questions.json'
 import Spinner from '@/components/svg/Spinner'
 
 function returnThankyou( currPage ) {
@@ -23,9 +22,34 @@ const SurveyForm = ({ params }) => {
     const [uuid,setUuid] = useState()
     const [loading,setLoading] = useState(false)
     const router = useRouter()
+    const [questions,setQuestions] = useState([])
+    const [time1,setTime1] = useState()
 
     useEffect( () => {
         setUuid(localStorage.getItem('userUuid'))
+        
+        const doo = async() => {
+            try {
+                const result = await userServerCall("getPostSurveyQuestions",{
+                    page
+                })
+                if ( result.data === "Please answer all the post survey questions." ) {
+                    alert("Please answer all the previous questions.")
+                    router.push('/survey/done/1')
+                } else if ( result.data === "Please answer all the survey questions." ) {
+                    alert("Please answer all the previous questions.")
+                    router.push('/survey/done/1')
+                } else {
+                    setQuestions( prev => result.data.question)
+                    setTime1(Date.now())
+                }
+            } catch (error) {
+                console.error(error)
+                alert("You might not be logged in or you might not have survey access. Login here - https://survey-portal.vercel.app/login")
+            }
+        } 
+
+        doo()
     } ,[])
     
     const onSubmit = async() => {
@@ -33,7 +57,10 @@ const SurveyForm = ({ params }) => {
         try {
             const result = await userServerCall( 'done',{ 
                 page,
-                form : userResponse,
+                form : {
+                    ...userResponse,
+                    timeToAttempt : Date.now() - time1  
+                },
             },false)
 
             const currPage = parseInt( page,10 )
@@ -59,7 +86,6 @@ const SurveyForm = ({ params }) => {
         }
         setLoading(false)
     }
-        
     return (
         <div
             className="bg-fixed w-full bg-cover"
@@ -69,8 +95,10 @@ const SurveyForm = ({ params }) => {
 
             <div className="min-h-screen flex items-center justify-center">
                 <div className="p-6 rounded-lg shadow-lg max-w-md w-full">
+                    <p className='text-center text-blue-500 font-bold text-xl' >{questions?.heading}</p>
+                    <br></br>
                     {
-                        questions[page].questions.map( (question,index) => {
+                        questions?.questions?.map( (question,index) => {
                             if ( question.inputType === "InputField" ) {
                                 return (<InputField
                                     key = {index}
@@ -105,14 +133,17 @@ const SurveyForm = ({ params }) => {
 
                         })
                     }
-                    <button
-                        type="submit"
-                        className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg"
-                        onClick={onSubmit}
-                    >
-                        <p  className='flex justify-center'>Next &nbsp;
-                        {loading && <Spinner />}</p>
-                    </button>
+                    {
+                        questions?.questions?.length ? 
+
+                            <button
+                                type="submit"
+                                className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg"
+                                onClick={onSubmit}
+                            >
+                            <p  className='flex justify-center'>Next &nbsp;{loading && <Spinner />}</p>
+                        </button> : <p className='text-center'>Loading...</p>
+                    }
                 </div>
             </div>
         </div>

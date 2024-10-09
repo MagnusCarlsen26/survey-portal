@@ -54,7 +54,6 @@ const DoctorCard = ({ doctor, lockedChoice, setLockedChoice }) => {
 }
 
 function routeToNextPage(router) {
-    console.log(parseInt(page,10))
     if (parseInt(page,10) === 12) router.push('/survey/done/instructions')
     else router.push(`/survey/question/${parseInt(page,10) + 1}`)
 }
@@ -76,16 +75,20 @@ const Survey = ({ params }) => {
     }]))
     const [lockedChoice,setLockedChoice] = useState(false)
     const [loading,setLoading] = useState(false)
+    const [time1,setTime1] = useState()
+    const [isAccess,setIsAccess] = useState(false)
 
     page = params.page
 
     const submitResponse = async(responseId) => {
         try {
+            console.log(Date.now() - time1)
             setLoading(true)
 
             const result = await userServerCall('response', { 
                 qid : page,
-                responseId
+                responseId,
+                timeToAttempt : Date.now() - time1,
             },false)
             if (result.data === "You have already attempted the question.") {
                 alert("Your current response won't be considered as you have already attempted the question.")
@@ -117,7 +120,13 @@ const Survey = ({ params }) => {
                     //     response.data.doctors[Math.floor(Math.random() * 5)].pfp = ""
                     // }
                     setDoctors(prev => response.data.doctors)
+                    console.log("first")
+                    setTime1(Date.now())
                 }
+
+                const checkAccess = await userServerCall('checkAccess',{})
+                if (checkAccess.data  === "No valid option selected") setIsAccess(true)
+                
             } catch(error) {
                 alert("You might not be logged in or you might not have survey access. Login here - https://survey-portal.vercel.app/login")
                 console.error(error)
@@ -137,7 +146,8 @@ const Survey = ({ params }) => {
 
             <br></br>
             <div className="flex items-center justify-center px-12" style={{zIndex : "-1"}}>
-                <div>
+                {
+                    isAccess ?                 <div>
                     <div className="flex">
                         <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[0]} />
                         <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[1]} />
@@ -150,7 +160,9 @@ const Survey = ({ params }) => {
                         <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[4]} />
                         <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[5]} />
                     </div>
-                </div>
+                </div> : "Loading ..."
+                }
+
                 
                 {lockedChoice && 
                     <div className='flex items-center justify-center'>

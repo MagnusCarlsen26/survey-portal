@@ -25,7 +25,8 @@ export const onUserSignup = functions.auth.user().onCreate(async(user) => {
         name,
         cat: Date.now(),
         surveyStatus : false,
-        isAccess : false
+        isAccess : false,
+        isDenyPhoto : false
     });
     return 0
 });

@@ -10,10 +10,30 @@
         "firebase-debug.*.log",
         "*.local",
         "downloadDb"
-      ]
+      ],
+      "v2": {
+        "helloWorld": {
+          "minInstances": 1
+        },
+        "beforecreated": {
+          "minInstances": 1
+        },
+        "onUserSignup": {
+          "minInstances": 1
+        },
+        "beforesignedin": {
+          "minInstances": 1
+        },
+        "isAccess": {
+          "minInstances": 1
+        },
+        "isAdminAccess": {
+          "minInstances": 1
+        }
+      }
     }
   ],
   "firestore": {
-    "rules" : "firestore.rules"
+    "rules": "firestore.rules"
   }
 }

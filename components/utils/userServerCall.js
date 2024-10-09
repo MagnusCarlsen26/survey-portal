@@ -12,7 +12,6 @@ export async function userServerCall( option, payload, isAdmin ) {
             uuid
         }
     });
-    console.log(result)
     return result
 }
 
