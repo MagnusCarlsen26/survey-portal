@@ -128,7 +128,7 @@ const Question = () => {
     return (
         <div
             className="bg-fixed w-full min-h-screen bg-cover"
-            style={{backgroundImage : 'url(/1.jpg)'}}
+            style={{backgroundImage : 'url(/1.png)'}}
         >
             <Navbar heading={"Create Questions"}/>
             <div className='flex flex-col items-center'>

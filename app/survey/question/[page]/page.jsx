@@ -7,6 +7,7 @@ import Navbar from '@/components/Navbar'
 import Spinner from '@/components/svg/Spinner'
 import Arrow from '@/components/svg/Arrow'
 import userServerCall from '@/components/utils/userServerCall'
+import DisableSS from '../../../DisableSS';
 
 let page
 
@@ -74,10 +75,10 @@ const Survey = ({ params }) => {
         image: ''
     }]))
     const [lockedChoice,setLockedChoice] = useState(false)
-    const [loading,setLoading] = useState(false)
+    const [loading,setLoading] = useState(true)
     const [time1,setTime1] = useState()
     const [isAccess,setIsAccess] = useState(false)
-
+    // const [noAccess, setNoACess] = 
     page = params.page
 
     const submitResponse = async(responseId) => {
@@ -108,6 +109,7 @@ const Survey = ({ params }) => {
     useEffect( () => {
         const doo = async() => {
             try {
+
                 const response = await userServerCall('getQuestion',{
                     page,
                 },false)
@@ -116,33 +118,32 @@ const Survey = ({ params }) => {
                     console.error('Please attempt previous questions first.')
                     alert("Please attempt previous questions first.")
                 } else {
-                    // if ( Math.random() < 1 ) {
-                    //     response.data.doctors[Math.floor(Math.random() * 5)].pfp = ""
-                    // }
                     setDoctors(prev => response.data.doctors)
                     console.log("first")
                     setTime1(Date.now())
                 }
 
                 const checkAccess = await userServerCall('checkAccess',{})
-                if (checkAccess.data  === "No valid option selected") setIsAccess(true)
+                if (checkAccess.data  === "No valid option selected") 
+                    setIsAccess(true)
                 
             } catch(error) {
                 alert("You might not be logged in or you might not have survey access. Login here - https://survey-portal.vercel.app/login")
                 console.error(error)
             }
+            setLoading(false)
+
         }
-        setLoading(true)
         doo()
-        setLoading(false)
     } , [] )
     
     return (
         <div
             className="bg-fixed w-full min-h-screen bg-cover"
-            style={{backgroundImage : 'url(/1.jpg)'}}
+            style={{backgroundImage : 'url(/1.png)'}}
         >
             <Navbar heading={`Choice set ${page}`} />
+            <DisableSS />
 
             <br></br>
             <div className="flex items-center justify-center px-12" style={{zIndex : "-1"}}>
@@ -160,7 +161,7 @@ const Survey = ({ params }) => {
                         <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[4]} />
                         <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[5]} />
                     </div>
-                </div> : "Loading ..."
+                </div> : ( loading ? "Loading..." : "You don't have access to the survey." )
                 }
 
                 

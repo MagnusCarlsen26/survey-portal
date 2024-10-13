@@ -44,7 +44,7 @@ const Auth = () => {
     return (
         <div 
             className="flex h-screen w-full items-center justify-center bg-cover bg-no-repeat"
-            style={{backgroundImage : 'url(/1.jpg)'}}
+            style={{backgroundImage : 'url(/1.png)'}}
         >
             <div 
                 className="rounded-xl bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8"

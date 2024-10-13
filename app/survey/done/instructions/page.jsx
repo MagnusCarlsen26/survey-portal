@@ -1,14 +1,16 @@
 "use client"
 
-import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState, useLayoutEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import userServerCall from '@/components/utils/userServerCall'
+import DisableSS from '../../../DisableSS';
 
 const Instructions = () =>{
 
     const router = useRouter()
     const [instructions, setInstructions] = useState([])
     const [loading,setLoading] = useState(true)
+    const [notAccess, setNotAccess] = useState(false)
 
     useEffect( () => {
         const doo = async() => {
@@ -18,7 +20,7 @@ const Instructions = () =>{
                 })
 
                 if ( result.data === "You don't have access to survey" ) {
-                    alert("you don't have access to survey")
+                    setNotAccess(true)
                 } else setInstructions(prev => result.data.instructions)
 
             } catch(error) {
@@ -33,8 +35,9 @@ const Instructions = () =>{
     return (
         <div 
             className="flex h-screen w-full items-center justify-center bg-cover bg-no-repeat" 
-            style={{backgroundImage : 'url(/1.jpg)'}}
+            style={{backgroundImage : 'url(/1.png)'}}
         >
+            <DisableSS />
             <div className="flex flex-col items-center justify-between min-h-screen p-16">
                 <h1 className="text-4xl instructions-card">Instructions</h1>
                 <div className="instructions-card">
@@ -45,6 +48,9 @@ const Instructions = () =>{
                                 <br/>
                             </>
                         ))
+                    }
+                    {
+                        notAccess? "You done have access to the survey." : ""
                     }
                 </div>
                 {

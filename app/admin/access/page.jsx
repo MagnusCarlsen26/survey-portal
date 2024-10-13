@@ -93,7 +93,7 @@ const Access = () => {
     return (
         <div
             className="bg-fixed w-full h-full bg-cover"
-            style={{backgroundImage : 'url(/1.jpg)'}}
+            style={{backgroundImage : 'url(/1.png)'}}
         >
             <Navbar heading = {"Access Manager"}/>
             <div className="flex items-center justify-between h-full p-16">

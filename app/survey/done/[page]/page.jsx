@@ -9,6 +9,7 @@ import { RadioButton, InputField, CheckboxGroup} from '@/components/inputCompone
 import userServerCall from '@/components/utils/userServerCall'
 import { useRouter } from 'next/navigation';
 import Spinner from '@/components/svg/Spinner'
+import DisableSS from '../../../DisableSS';
 
 function returnThankyou( currPage ) {
     if ( currPage == 3 ) return 'thankyou'
@@ -30,6 +31,7 @@ const SurveyForm = ({ params }) => {
         
         const doo = async() => {
             try {
+                setLoading(true)
                 const result = await userServerCall("getPostSurveyQuestions",{
                     page
                 })
@@ -47,6 +49,7 @@ const SurveyForm = ({ params }) => {
                 console.error(error)
                 alert("You might not be logged in or you might not have survey access. Login here - https://survey-portal.vercel.app/login")
             }
+            setLoading(false)
         } 
 
         doo()
@@ -89,10 +92,10 @@ const SurveyForm = ({ params }) => {
     return (
         <div
             className="bg-fixed w-full bg-cover"
-            style={{backgroundImage : 'url(/1.jpg)'}}
+            style={{backgroundImage : 'url(/1.png)'}}
         >
             <Navbar heading={"Post Experiment Survey"} />
-
+            <DisableSS />
             <div className="min-h-screen flex items-center justify-center">
                 <div className="p-6 rounded-lg shadow-lg max-w-md w-full">
                     <p className='text-center text-blue-500 font-bold text-xl' >{questions?.heading}</p>
@@ -142,7 +145,11 @@ const SurveyForm = ({ params }) => {
                                 onClick={onSubmit}
                             >
                             <p  className='flex justify-center'>Next &nbsp;{loading && <Spinner />}</p>
-                        </button> : <p className='text-center'>Loading...</p>
+                        </button> : <p className='text-center'>
+                            {
+                                loading ? "Loading..." : "You don't have access to the survey."
+                            }
+                        </p>
                     }
                 </div>
             </div>
