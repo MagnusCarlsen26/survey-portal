@@ -6,16 +6,13 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 // import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCZH3kOaXi69bj6vrXNQrns-K-Ny4PJDxY",
-    authDomain: "survey-portal-3b2b0.firebaseapp.com",
-    projectId: "survey-portal-3b2b0",
-    storageBucket: "survey-portal-3b2b0.appspot.com",
-    messagingSenderId: "387894139016",
-    appId: "1:387894139016:web:3d81e572615e553aa8e73d",
-    measurementId: "G-DXDEK1FKYV",
-    databaseURL: "https://survey-portal-3b2b0-default-rtdb.asia-southeast1.firebasedatabase.app"
-};
-
+    apiKey: "AIzaSyBowmiDJ9xRrZvKeU8MhMTOQ8w7dSTZ6ZI",
+    authDomain: "khushal-test3-123.firebaseapp.com",
+    projectId: "khushal-test3-123",
+    storageBucket: "khushal-test3-123.appspot.com",
+    messagingSenderId: "866179934772",
+    appId: "1:866179934772:web:80605323d0c273bc7bf861"
+  };
 // export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp()
 // export const auth = getAuth(app)
 // export const analytics = getAnalytics(app);

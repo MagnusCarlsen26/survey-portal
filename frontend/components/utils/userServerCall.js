@@ -1,5 +1,5 @@
 import { httpsCallable } from 'firebase/functions';
-import { functions } from '@/firebase/confing'
+import { functions } from '@/../firebase/confing'
 
 export async function userServerCall( option, payload, isAdmin ) {
     const uuid = localStorage.getItem('userUuid')

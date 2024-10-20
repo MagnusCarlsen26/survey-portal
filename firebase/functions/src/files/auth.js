@@ -10,7 +10,7 @@ export const beforecreated = beforeUserCreated((event) => {
 
     if (!user?.email?.includes('@iitj.ac.in')) {
         throw new functions.https.HttpsError('Please signup with IITJ email', "Unauthorized email");
-    }
+    } 
 });
 
 export const onUserSignup = functions.auth.user().onCreate(async(user) => {

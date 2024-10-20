@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 
-import { auth, GoogleAuthProvider, signInWithPopup } from '@/firebase/confing';
+import { auth, GoogleAuthProvider, signInWithPopup } from '@/../firebase/confing';
 import { useRouter } from 'next/navigation';
 import React , { useState } from 'react'
 import Google from '@/components/svg/Google'

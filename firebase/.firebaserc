@@ -1,10 +1,10 @@
 {
   "projects": {
-    "default": "survey-portal-3b2b0"
+    "default": "khushal-test3-123"
   },
   "targets": {},
   "etags": {
-    "survey-portal-3b2b0": {
+    "khushal-test3-123": {
       "extensionInstances": {}
     }
   },
