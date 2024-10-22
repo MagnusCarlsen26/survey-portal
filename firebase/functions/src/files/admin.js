@@ -73,21 +73,7 @@ async function setQuestion({ page, doctors }) {;
         await doctorsRef.set({
             doctors
         })
-        // const uploadPromises = doctors.map( async (doctor) => {
-        //     const imageUrl = await testBucket(doctor.pfp, doctor.id);
-        //     return { ...doctor, imageUrl }; // Return the original data along with the image URL
-        // });
 
-        // const uploadedImages = await Promise.all(uploadPromises)
-
-        // const doctorsWithoutPfp = uploadedImages.map( ({imageUrl,pfp,...doctor}) => ({
-        //     ...doctor,
-        //     pfp : imageUrl
-        // }) )
-
-        // await doctorsRef.set({
-        //     doctors : doctorsWithoutPfp
-        // })
         logger.info("Successfully saved doctors list.");
         return 'Done'
     } catch (error) {

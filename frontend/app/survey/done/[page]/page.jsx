@@ -12,7 +12,7 @@ import Spinner from '@/components/svg/Spinner'
 import DisableSS from '../../../DisableSS';
 
 function returnThankyou( currPage ) {
-    if ( currPage == 3 ) return 'thankyou'
+    if ( currPage == process.env.NEXT_PUBLIC_NO_OF_POST_SURVEY_QUESTIONS + 1 ) return 'thankyou'
     else return currPage + 1
 }
 
@@ -20,14 +20,12 @@ const SurveyForm = ({ params }) => {
 
     const page = params.page
     const [userResponse, setUserResponse] = useState({})
-    const [uuid,setUuid] = useState()
     const [loading,setLoading] = useState(false)
     const router = useRouter()
     const [questions,setQuestions] = useState([])
     const [time1,setTime1] = useState()
 
     useEffect( () => {
-        setUuid(localStorage.getItem('userUuid'))
         
         const doo = async() => {
             try {

@@ -25,8 +25,8 @@ const Navbar = ({ heading }) => {
         <nav className="sticky top-0 left-0 right-0 bg-black border-gray-200" style={{zIndex : "1"}}>
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <a href="https://flowbite.com/" className="flex items-center space-x-3 rtl:space-x-reverse">
-                    <OrgLogo />
-                    <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">MySwasthya</span>
+                    <img src={process.env.NEXT_PUBLIC_LOGO} width="28" height="28" alt="" />
+                    <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">{process.env.NEXT_PUBLIC_ORG_NAME}</span>
                 </a>
                 
                 <p className="text-blue-300 text-center absolute inset-0 flex justify-center items-center text-xl">{ heading }</p>

@@ -19,17 +19,17 @@ function InputField({text,onChange,value}) {
 function DoctorCard({ doctor, id, setCurrDoctor, doctors, setIsEdit }) {
     return (
         <div className="card">
-            <div className="image-container">
-                <img className="image" src={doctor.pfp} alt={doctor.name} width="120" height="120" loading="lazy" />
-            </div>
+            { process.env.NEXT_PUBLIC_IS_IMAGE === 'true' && <div className="image-container">
+                <img className="image" src={doctor.pfp} alt={doctor[process.env.NEXT_PUBLIC_PARAM_NAME_0]} width="120" height="120" loading="lazy" />
+            </div> }
             <div className="info-container">
-                <h3>{doctor.name}</h3>
-                <span className="biggerSpan">{doctor.specialty}</span><br />
-                <span>{doctor.experience} years of experience</span><br />
-                <span> ₹{doctor.consultationFees} Consultation fees</span><br />
-                <div className="rating-widget">
-                    <div className="rating">{doctor.rating}⭐</div>
-                </div>
+                <h3>{doctor[process.env.NEXT_PUBLIC_PARAM_NAME_0]}</h3>
+                { process.env.NEXT_PUBLIC_PARAM_NAME_1 !== 'false' && <span className="biggerSpan">{process.env.NEXT_PUBLIC_PARAM_1} : {doctor[process.env.NEXT_PUBLIC_PARAM_NAME_1]} <br /></span>}
+                { process.env.NEXT_PUBLIC_PARAM_NAME_2 !== 'false' && <span>{process.env.NEXT_PUBLIC_PARAM_2} : {doctor[process.env.NEXT_PUBLIC_PARAM_NAME_2]} <br /></span>}
+                { process.env.NEXT_PUBLIC_PARAM_NAME_3 !=='false' && <span> {process.env.NEXT_PUBLIC_PARAM_3} : {doctor[process.env.NEXT_PUBLIC_PARAM_NAME_3]} <br /></span>}
+                {  process.env.NEXT_PUBLIC_PARAM_NAME_4 !== 'false' && <div className="rating-widget">
+                    <div className="rating">{doctor[process.env.NEXT_PUBLIC_PARAM_NAME_4]} {process.env.NEXT_PUBLIC_PARAM_4}</div>
+                </div> }
             </div>
             <div className="button-container flex flex-col">
                 <br/>
@@ -46,6 +46,51 @@ function DoctorCard({ doctor, id, setCurrDoctor, doctors, setIsEdit }) {
             </div>
         </div>
     );
+    //     <div className="card border border-gray-200 p-4 rounded-lg shadow-md" >
+
+    //         { process.env.NEXT_PUBLIC_IS_IMAGE === 'true' && <div className="image-container">
+    //             <img className="image" src={doctor.pfp} alt={doctor[process.env.NEXT_PUBLIC_PARAM_NAME_0]} width="120" height="120" loading="lazy" />
+    //         </div> }
+    //         <div className="info-container">
+    //             <h3>{doctor[process.env.NEXT_PUBLIC_PARAM_NAME_0]}</h3>
+    //             { process.env.NEXT_PUBLIC_PARAM_NAME_1 !== 'false' && <span className="biggerSpan">{process.env.NEXT_PUBLIC_PARAM_1} : {doctor[process.env.NEXT_PUBLIC_PARAM_NAME_1]} <br /></span>}
+    //             { process.env.NEXT_PUBLIC_PARAM_NAME_2 !== 'false' && <span>{process.env.NEXT_PUBLIC_PARAM_2} : {doctor[process.env.NEXT_PUBLIC_PARAM_NAME_2]} <br /></span>}
+    //             { process.env.NEXT_PUBLIC_PARAM_NAME_3 !=='false' && <span> {process.env.NEXT_PUBLIC_PARAM_3} : {doctor[process.env.NEXT_PUBLIC_PARAM_NAME_3]} <br /></span>}
+    //             {  process.env.NEXT_PUBLIC_PARAM_NAME_4 !== 'false' && <div className="rating-widget">
+    //                 <div className="rating">{doctor[process.env.NEXT_PUBLIC_PARAM_NAME_4]} {process.env.NEXT_PUBLIC_PARAM_4}</div>
+    //             </div> }
+    //         </div>
+    //         <div className="button-container">
+    //             <button 
+    //                 className="button-4"
+    //                 onClick={showConfirmation}
+    //             >
+    //                 Choose
+    //             </button>
+    //         </div>
+    //     </div>
+    // );
+}
+
+function DoctorRow ({doctor1,doctor2}) {
+    return (
+        <div className='flex'>
+            <DoctorCard  doctor={doctor1} />
+            <DoctorCard  doctor={doctor2} />
+        </div>
+    )
+}
+
+function RenderDoctors({doctors}) {
+    return doctors.map( (doctor,index) => {
+        if (index >= process.env.NEXT_PUBLIC_NO_OF_CHOICES) return <></>
+        if ( index%2 == 0 ) {
+            if ( index + 1 < doctors.length && index + 1 < process.env.NEXT_PUBLIC_NO_OF_CHOICES) return <DoctorRow doctor1 = {doctors[index]} doctor2 = {doctors[index+1]}  setLockedChoice={setLockedChoice}/>
+            return <div className='flex'>
+                    <DoctorCard  doctor={doctor} />
+                </div>
+        } else return <></>
+    })
 }
 
 const Question = () => {
@@ -83,28 +128,14 @@ const Question = () => {
             setDoctors( prev => [...prev,currDoctor] )
         }
         setIsEdit(false)
-        setCurrDoctor({
-            id : '',
-            name: '',
-            experience: '',
-            consultationFees: '',
-            rating: '',
-        }); 
+        setCurrDoctor({}); 
     }
 
     const [isSaving,setIsSaving] = useState(false)
     const [doctors,setDoctors] = useState([])
     const [page,SetPage] = useState()
     const [isEdit,setIsEdit] = useState(false)
-    const [currDoctor,setCurrDoctor] = useState({
-        name: '',
-        experience: '',
-        consultationFees: '',
-        distance: '',
-        rating: '',
-        id : '',
-        pfp : "",
-    }); 
+    const [currDoctor,setCurrDoctor] = useState({}); 
     const [uuid,setUuid] = useState("")
     const [serverResponse,setServerResponse] = useState("")
 
@@ -125,7 +156,9 @@ const Question = () => {
           reader.readAsDataURL(file);
         }
     };
-    
+
+    const noOfChoices = process.env.NEXT_PUBLIC_NO_OF_CHOICES
+
     return (
         <div
             className="bg-fixed w-full min-h-screen bg-cover"
@@ -134,43 +167,33 @@ const Question = () => {
             <Navbar heading={"Create Questions"}/>
             <div className='flex flex-col items-center'>
                 <br/>
-                <div className='flex'>
-                    { doctors[0]? <DoctorCard id={0} setIsEdit={setIsEdit} setCurrDoctor={setCurrDoctor} doctors={doctors} doctor={doctors[0]}/> : "" }
-                    { doctors[1]? <DoctorCard id={1} setIsEdit={setIsEdit} setCurrDoctor={setCurrDoctor} doctors={doctors} doctor={doctors[1]}/> : "" }
-                </div>
-                <div className='flex'>
-                    { doctors[2]? <DoctorCard id={2} setIsEdit={setIsEdit} setCurrDoctor={setCurrDoctor} doctors={doctors} doctor={doctors[2]}/> : "" }
-                    { doctors[3]? <DoctorCard id={3} setIsEdit={setIsEdit} setCurrDoctor={setCurrDoctor} doctors={doctors} doctor={doctors[3]}/> : "" }
-                </div>
-                <div className='flex'>
-                    { doctors[4]? <DoctorCard id={4} setIsEdit={setIsEdit} setCurrDoctor={setCurrDoctor} doctors={doctors} doctor={doctors[4]}/> : "" }
-                    { doctors[5]? <DoctorCard id={5} setIsEdit={setIsEdit} setCurrDoctor={setCurrDoctor} doctors={doctors} doctor={doctors[5]}/> : "" }
-                </div>
+                <div><RenderDoctors doctors={doctors} /></div>
             </div>
             <div className='flex flex-col items-center'>
                 {
-                    doctors.length <6 ?
+                    doctors.length < noOfChoices ?
                     <>
                         <InputField value={currDoctor.id} text={"id"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, id : text })} ) }}/>                    
-                        <InputField value={currDoctor.name} text={"Doctor's Name"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, name : text })} ) }}/>
-                        <InputField value={currDoctor.experience} text={"Years of Experience"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, experience : text })} ) }}/>
-                        <InputField value={currDoctor.consultationFees} text={"Consultation fees"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, consultationFees : text })} ) }}/>
-                        <InputField value={currDoctor.rating} text={"Rating"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, rating : text })} ) }}/>                    
-                        <input type="file" accept="image/*" onChange={handleFileChange} />
+                        { process.env.NEXT_PUBLIC_PARAM_NAME_0 !== 'false' && <InputField value={currDoctor[process.env.NEXT_PUBLIC_PARAM_NAME_0]} text={process.env.NEXT_PUBLIC_PARAM_0} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, [process.env.NEXT_PUBLIC_PARAM_0] : text })} ) }}/>}
+                        { process.env.NEXT_PUBLIC_PARAM_NAME_1 !== 'false' && <InputField value={currDoctor[process.env.NEXT_PUBLIC_PARAM_NAME_1]} text={process.env.NEXT_PUBLIC_PARAM_1} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, [process.env.NEXT_PUBLIC_PARAM_1] : text })} ) }}/>}
+                        { process.env.NEXT_PUBLIC_PARAM_NAME_2 !== 'false' && <InputField value={currDoctor[process.env.NEXT_PUBLIC_PARAM_NAME_2]} text={process.env.NEXT_PUBLIC_PARAM_2} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, [process.env.NEXT_PUBLIC_PARAM_2] : text })} ) }}/>}
+                        { process.env.NEXT_PUBLIC_PARAM_NAME_3 !== 'false' && <InputField value={currDoctor[process.env.NEXT_PUBLIC_PARAM_NAME_3]} text={process.env.NEXT_PUBLIC_PARAM_3} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, [process.env.NEXT_PUBLIC_PARAM_3] : text })} ) }}/>}
+                        { process.env.NEXT_PUBLIC_PARAM_NAME_4 !== 'false' && <InputField value={currDoctor[process.env.NEXT_PUBLIC_PARAM_NAME_4]} text={process.env.NEXT_PUBLIC_PARAM_4} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, [process.env.NEXT_PUBLIC_PARAM_4] : text })} ) }}/>}          
+                        { process.env.NEXT_PUBLIC_IS_IMAGE === 'true' && <input type="file" accept="image/*" onChange={handleFileChange} />}
 
                         <button 
                             onClick={saveDoctor}
                             type="button" 
                             className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
                         >
-                            Save Doctor
+                            Save
                         </button>
                     </>
                     : ""
                 }
                 <br/>
                 {
-                    doctors.length === 6 ?
+                    doctors.length == noOfChoices ?
                     !isSaving ? <>
                         <InputField text={"Page"} onChange={SetPage} value={page}/>
                         <button 

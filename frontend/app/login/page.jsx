@@ -53,9 +53,9 @@ const Auth = () => {
 
                 <div className="text-white">
                     <div className="mb-8 flex flex-col items-center">
-                        <img src="https://erp.iitj.ac.in/favicon.ico" width="150" alt="" />
+                        <img src={process.env.NEXT_PUBLIC_LOGO} width="150" alt="" />
                         {/* ! Example */}
-                        <h1 className="mb-2 text-2xl text-black">IITJ Survey</h1>
+                        <h1 className="mb-2 text-2xl text-black">{process.env.NEXT_PUBLIC_TITLE}</h1>
                     </div>
                     <LoginButton 
                         onClick={signInWithGoogle}

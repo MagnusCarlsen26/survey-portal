@@ -14,40 +14,41 @@ let page
 const DoctorCard = ({ doctor, lockedChoice, setLockedChoice }) => {
 
     const showConfirmation = () => {
-        let userResponse = confirm(`Confirm your choice : ${doctor.name}`);
+        let userResponse = confirm(`Confirm your choice : ${doctor[process.env.NEXT_PUBLIC_PARAM_NAME_0]}`);
         
         if (userResponse) {
             if (lockedChoice) {
-                let userResponse = confirm(`Do you want to change your choice to : ${doctor.name}`)
+                let userResponse = confirm(`Do you want to change your choice to : ${doctor[process.env.NEXT_PUBLIC_PARAM_NAME_0]}`)
                 if (userResponse) {
-                    setLockedChoice({ responseId : doctor.id, doctorName : doctor.name})
+                    setLockedChoice({ responseId : doctor.id, name : doctor[process.env.NEXT_PUBLIC_PARAM_NAME_0]})
                 }
             } else {
-                setLockedChoice({ responseId : doctor.id, doctorName : doctor.name})
+                setLockedChoice({ responseId : doctor.id, name : doctor[process.env.NEXT_PUBLIC_PARAM_NAME_0]})
             }
         }
     }
-          
+
     return (
         <div className="card border border-gray-200 p-4 rounded-lg shadow-md" >
-            <div className="image-container">
-                <img className="image" src={doctor.pfp} alt={doctor.name} width="120" height="120" loading="lazy" />
-            </div>
+
+            { process.env.NEXT_PUBLIC_IS_IMAGE === 'true' && <div className="image-container">
+                <img className="image" src={doctor.pfp} alt={doctor[process.env.NEXT_PUBLIC_PARAM_NAME_0]} width="120" height="120" loading="lazy" />
+            </div> }
             <div className="info-container">
-                <h3>{doctor.name}</h3>
-                <span className="biggerSpan">{doctor.specialty}</span><br />
-                <span>{doctor.experience} years of experience</span><br />
-                <span> ₹{doctor.consultationFees} Consultation fees</span><br />
-                <div className="rating-widget">
-                    <div className="rating">{doctor.rating}⭐</div>
-                </div>
+                <h3>{doctor[process.env.NEXT_PUBLIC_PARAM_NAME_0]}</h3>
+                { process.env.NEXT_PUBLIC_PARAM_NAME_1 !== 'false' && <span className="biggerSpan">{process.env.NEXT_PUBLIC_PARAM_1} : {doctor[process.env.NEXT_PUBLIC_PARAM_NAME_1]} <br /></span>}
+                { process.env.NEXT_PUBLIC_PARAM_NAME_2 !== 'false' && <span>{process.env.NEXT_PUBLIC_PARAM_2} : {doctor[process.env.NEXT_PUBLIC_PARAM_NAME_2]} <br /></span>}
+                { process.env.NEXT_PUBLIC_PARAM_NAME_3 !=='false' && <span> {process.env.NEXT_PUBLIC_PARAM_3} : {doctor[process.env.NEXT_PUBLIC_PARAM_NAME_3]} <br /></span>}
+                {  process.env.NEXT_PUBLIC_PARAM_NAME_4 !== 'false' && <div className="rating-widget">
+                    <div className="rating">{doctor[process.env.NEXT_PUBLIC_PARAM_NAME_4]} {process.env.NEXT_PUBLIC_PARAM_4}</div>
+                </div> }
             </div>
             <div className="button-container">
                 <button 
                     className="button-4"
                     onClick={showConfirmation}
                 >
-                    Book a visit now
+                    Choose
                 </button>
             </div>
         </div>
@@ -55,30 +56,42 @@ const DoctorCard = ({ doctor, lockedChoice, setLockedChoice }) => {
 }
 
 function routeToNextPage(router) {
-    if (parseInt(page,10) === 12) router.push('/survey/done/instructions')
+    if (parseInt(page,10) === process.env.NEXT_PUBLIC_NO_OF_QUESTIONS) router.push('/survey/done/instructions')
     else router.push(`/survey/question/${parseInt(page,10) + 1}`)
+}
+
+function DoctorRow ({doctor1,doctor2,lockedChoice,setLockedChoice}) {
+    return (
+        <div className='flex'>
+            <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctor1} />
+            <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctor2} />
+        </div>
+    )
+}
+
+function RenderDoctors({doctors,lockedChoice,setLockedChoice}) {
+    return doctors.map( (doctor,index) => {
+        if (index >= process.env.NEXT_PUBLIC_NO_OF_CHOICES) return <></>
+        if ( index%2 == 0 ) {
+            if ( index + 1 < doctors.length && index + 1 < process.env.NEXT_PUBLIC_NO_OF_CHOICES) return <DoctorRow doctor1 = {doctors[index]} doctor2 = {doctors[index+1]} lockedChoice={lockedChoice} setLockedChoice={setLockedChoice}/>
+            return <div className='flex'>
+                    <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctor} />
+                </div>
+        } else return <></>
+    })
 }
 
 const Survey = ({ params }) => {
 
-    const router = useRouter()
+    const noOfChoices = process.env.NEXT_PUBLIC_NO_OF_CHOICES
 
-    const [doctors,setDoctors] = useState( Array.from({ length: 6 }, () => 
-        [{
-        name: '',
-        specialty: '',
-        experience: '',
-        consultationFees: '',
-        distance: '',
-        rating: '',
-        ratingsCount: '',
-        image: ''
-    }]))
+    const router = useRouter()
+    const [doctors,setDoctors] = useState( Array.from({ length: noOfChoices }, () => [{}]))
     const [lockedChoice,setLockedChoice] = useState(false)
     const [loading,setLoading] = useState(true)
     const [time1,setTime1] = useState()
     const [isAccess,setIsAccess] = useState(false)
-    // const [noAccess, setNoACess] = 
+
     page = params.page
 
     const submitResponse = async(responseId) => {
@@ -94,7 +107,7 @@ const Survey = ({ params }) => {
             if (result.data === "You have already attempted the question.") {
                 alert("Your current response won't be considered as you have already attempted the question.")
                 routeToNextPage(router)
-            } else if (result.data === "Please submit response for previous quesitons first.") {
+            } else if (result.data === "Please submit response for previous quesitons firsprocess.env.") {
                 alert(result.data)
             } else if (result.data === "response") {
                 routeToNextPage(router)
@@ -114,12 +127,11 @@ const Survey = ({ params }) => {
                     page,
                 },false)
 
-                if (response.data === 'Please attempt previous questions first.') {
-                    console.error('Please attempt previous questions first.')
-                    alert("Please attempt previous questions first.")
+                if (response.data === 'Please attempt previous questions firsprocess.env.') {
+                    console.error('Please attempt previous questions firsprocess.env.')
+                    alert("Please attempt previous questions firsprocess.env.")
                 } else {
                     setDoctors(prev => response.data.doctors)
-                    console.log("first")
                     setTime1(Date.now())
                 }
 
@@ -148,28 +160,15 @@ const Survey = ({ params }) => {
             <br></br>
             <div className="flex items-center justify-center px-12" style={{zIndex : "-1"}}>
                 {
-                    isAccess ?                 <div>
-                    <div className="flex">
-                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[0]} />
-                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[1]} />
-                    </div>
-                    <div className="flex">
-                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[2]} />
-                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[3]} />
-                    </div>
-                    <div className="flex">
-                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[4]} />
-                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[5]} />
-                    </div>
-                </div> : ( loading ? "Loading..." : "You don't have access to the survey." )
+                    isAccess ? <div><RenderDoctors doctors={doctors} lockedChoice={lockedChoice} setLockedChoice={setLockedChoice}/></div> : 
+                    ( loading ? "Loading..." : "You don't have access to the survey." )
                 }
-
                 
                 {lockedChoice && 
                     <div className='flex items-center justify-center'>
                         <div>
                             <div className='bg-white rounded-r-md py-2 border-l px-3'>
-                                <p>{lockedChoice?.doctorName}</p>
+                                <p>{lockedChoice?.name}</p>
                             </div>
                             <button 
                                 type="button" 

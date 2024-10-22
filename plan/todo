@@ -84,17 +84,19 @@
 
 
 ---- CUSTOMIZATIONS ----
-1. Assuptiom that there are only 12 questions and 3 post survey.
 2. Hardcoded Email domain.✔️
-3. Download DB has hard coded attributes.
-4. Hardcoded doctor card.
-5. Assumptiom that there are only 6 choices.
-6. Assumption that only 1 choice can be made.
-7. Hardcoded error - "Please use and IITJ email."
-8. Hardcoded meta tags, background image and favicon.
+4. Hardcoded doctor card.✔️
 9. Add UI for adding instructions.✔️
+5. Assumptiom that there are only 6 choices.✔️
+7. Hardcoded error - "Please use and IITJ email."✔️
 10. Add UI for adding post survey questions.✔️
+1. Assuptiom that there are only 12 questions and 3 post survey.✔️
+8. Hardcoded meta tags and favicon.in✔️
+x. Custom Background image.
+3. Download DB has hard coded attributes.
+12. UI for adding post survey questions.
 11. Watch firebase/functions/src/config.
+6. Assumption that only 1 choice can be made.❌
 
 Download Database - http://43.204.110.108:3000/downloadDB
 Website - https://survey-portal.vercel.app/login
