@@ -22,16 +22,16 @@ const Navbar = ({ heading }) => {
     } , [] )
 
     return (
-        <nav class="sticky top-0 left-0 right-0 bg-black border-gray-200" style={{zIndex : "1"}}>
-            <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <nav className="sticky top-0 left-0 right-0 bg-black border-gray-200" style={{zIndex : "1"}}>
+            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+                <a href="https://flowbite.com/" className="flex items-center space-x-3 rtl:space-x-reverse">
                     <OrgLogo />
-                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">MySwasthya</span>
+                    <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">MySwasthya</span>
                 </a>
                 
-                <p class="text-blue-300 text-center absolute inset-0 flex justify-center items-center text-xl">{ heading }</p>
+                <p className="text-blue-300 text-center absolute inset-0 flex justify-center items-center text-xl">{ heading }</p>
             
-                <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                     <p className='text-white'>{userName}</p>
                 </div>
             </div>

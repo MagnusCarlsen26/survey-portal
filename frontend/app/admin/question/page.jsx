@@ -4,6 +4,7 @@ import { db,functions } from '@/../firebase/confing'
 import { httpsCallable } from 'firebase/functions';
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
+
 function InputField({text,onChange,value}) {
     return (
         <div className="w-72 p-2">

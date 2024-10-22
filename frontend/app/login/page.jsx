@@ -37,7 +37,7 @@ const Auth = () => {
             localStorage.setItem("userUuid",user.uid)
             router.push('/survey/instructions')
         } catch (error) {
-            setErr("Please use an IITJ Email.")
+            setErr(`Please use an ${process.env.NEXT_PUBLIC_EMAIL_DOMAIN} Email.`)
         }
     };
 

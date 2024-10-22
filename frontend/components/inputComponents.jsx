@@ -14,7 +14,7 @@ export function InputField({text, onChange, type}) {
                 className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm rounded px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md border-black border-2"
                 onChange={(e) => onChange(e.target.value)}
             />
-            <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"/>
+            <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"/>
         </div>
     )
 }
@@ -89,7 +89,7 @@ export function RadioButton({ heading, options, onChange }) {
                     </div>  
                 ) )
             }
-            <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"/>
+            <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"/>
         </>
     )   
 }

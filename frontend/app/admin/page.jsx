@@ -20,9 +20,12 @@ const Admin = () => {
                     <div className="rounded-3xl border-2 border-black p-12 backdrop-blur-md cursor-pointer" onClick={() => router.push('admin/download')}>
                         <p className="text-black text-center">Download DB</p>
                     </div>
-                    {/* <div className="rounded-3xl border-2 border-black p-12 backdrop-blur-md cursor-pointer" onClick={() => router.push('admin/access')}>
-                        <p className="text-black text-center">Coming soon...</p>
-                    </div> */}
+                    <div className="rounded-3xl border-2 border-black p-12 backdrop-blur-md cursor-pointer" onClick={() => router.push('admin/instructions/survey')}>
+                        <p className="text-black text-center">Instructions</p>
+                    </div>
+                    <div className="rounded-3xl border-2 border-black p-12 backdrop-blur-md cursor-pointer" onClick={() => router.push('admin/instructions/postSurvey')}>
+                        <p className="text-black text-center">Post Survey Instructions</p>
+                    </div>
                 </div>
             </div>
         </div>

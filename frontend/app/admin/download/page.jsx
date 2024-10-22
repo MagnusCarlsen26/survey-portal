@@ -8,7 +8,7 @@ const Download = () => {
     const router = useRouter()
     return (
         <div>
-        <label for="default-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Default input</label>
+        <label for="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Default input</label>
         <button 
             className='border-2'
             onClick={() => router.push(`http://13.232.236.11:3000/downloadDb`)}

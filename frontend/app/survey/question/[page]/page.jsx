@@ -173,12 +173,12 @@ const Survey = ({ params }) => {
                             </div>
                             <button 
                                 type="button" 
-                                class="bg-green-600 text-white disabled: rounded-r-md py-2 border-l border-gray-200 hover:bg-green-800 hover:text-white px-3"
+                                className="bg-green-600 text-white disabled: rounded-r-md py-2 border-l border-gray-200 hover:bg-green-800 hover:text-white px-3"
                                 onClick={() => submitResponse(lockedChoice.responseId)}
                                 disabled = { loading }
                             >
-                            <div class="flex flex-row align-middle">
-                                <span class="mr-2 text-base">Next</span>
+                            <div className="flex flex-row align-middle">
+                                <span className="mr-2 text-base">Next</span>
                                 { loading ? <Spinner /> : <Arrow /> }
 
                             </div>

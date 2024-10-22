@@ -8,7 +8,7 @@ import { db } from './../config.js'
 export const beforecreated = beforeUserCreated((event) => {
     const user = event.data;
 
-    if (!user?.email?.includes('@iitj.ac.in')) {
+    if (!user?.email?.includes(process.env.EMAIL_DOMAIN)) {
         throw new functions.https.HttpsError('Please signup with IITJ email', "Unauthorized email");
     } 
 });
@@ -34,7 +34,7 @@ export const onUserSignup = functions.auth.user().onCreate(async(user) => {
 export const beforesignedin = beforeUserSignedIn((event) => {
     const user = event.data;
  
-    if (!user?.email?.includes('@iitj.ac.in')) {
+    if (!user?.email?.includes(process.env.EMAIL_DOMAIN)) {
       throw new functions.https.HttpsError('Please signin with IITJ email', "Unauthorized email");
     }
 });

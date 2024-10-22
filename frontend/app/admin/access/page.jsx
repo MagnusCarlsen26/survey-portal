@@ -132,7 +132,7 @@ const Access = () => {
                         <button 
                             onClick={() => {
                                 if (grantCurrEmail.length) {
-                                    setGrantEmails(prev => [...prev,`${grantCurrEmail}@iitj.ac.in`]),
+                                    setGrantEmails(prev => [...prev,`${grantCurrEmail}${process.env.NEXT_PUBLIC_EMAIL_DOMAIN}`]),
                                     setGrantCurrEmail("")
                                 }
                             }}
@@ -168,7 +168,7 @@ const Access = () => {
                         <button 
                             onClick={() => {
                                 if (removeCurrEmail.length) {
-                                    setRemoveEmails(prev => [...prev,`${removeCurrEmail}@iitj.ac.in`]),
+                                    setRemoveEmails(prev => [...prev,`${removeCurrEmail}${process.env.NEXT_PUBLIC_EMAIL_DOMAIN}`]),
                                     setRemoveCurrEmail("")
                                 }
                             }}
@@ -204,7 +204,7 @@ const Access = () => {
                         <button 
                             onClick={() => {
                                 if (isDenyPhotoEmail.length) {
-                                    setIsDenyPhotoEmails(prev => [...prev,`${isDenyPhotoEmail}@iitj.ac.in`]),
+                                    setIsDenyPhotoEmails(prev => [...prev,`${isDenyPhotoEmail}${process.env.NEXT_PUBLIC_EMAIL_DOMAIN}`]),
                                     setIsDenyPhotoEmail("")
                                 }
                             }}
