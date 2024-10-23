@@ -97,6 +97,8 @@ x. Custom Background image.
 12. UI for adding post survey questions.
 11. Watch firebase/functions/src/config.
 6. Assumption that only 1 choice can be made.❌
+x. Firebase security rules
+
 
 Download Database - http://43.204.110.108:3000/downloadDB
 Website - https://survey-portal.vercel.app/login

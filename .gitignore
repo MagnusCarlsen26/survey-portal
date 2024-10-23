@@ -35,8 +35,6 @@ firebase/downloadDb/db/done.csv
 firebase/downloadDb/db/users.csv
 firebase/downloadDb/db/questions.csv
 firebase/functions/src/files/db/dbSecret.json
-
-.env
 *.pem
 *.zip
 *.csv
