@@ -147,12 +147,29 @@ async function denyPhoto({ emails }) {
     }
 }
 
+async function setInstructions({ type, instructions }) {
+    try {
+        if (type === "survey" || type === "postSurvey") {
+            const doctorsRef = db.collection("instructions").doc(type)
+            await doctorsRef.set({
+                instructions
+            })
+            return 'Done'
+        }
+        return 'Please choose between survey and postSurvey.'
+    } catch (error) {
+        logger.error("Error saving doctors list:", error);
+        return error
+    }
+}
+
 async function setPostSurveyQuestion(question,page) {
     try {
         const doctorsRef = db.collection('postSurveyQuestions').doc(page)
         await doctorsRef.set({
             question
         })
+        console.log('done')
         return 'Done'
     } catch (error) {
         logger.error("Error saving doctors list:", error);
@@ -193,6 +210,7 @@ export const isAdminAccess = onRequest({ cors : true , minInstances: 0 },async(r
         else if ( option === 'removeAccess' ) result = await removeAccess(payload)
         else if ( option === 'denyPhoto' ) result = await denyPhoto(payload)
         else if ( option === 'download' ) result = await download(payload)
+        else if ( option === 'setInstructions' ) result = await setInstructions(payload)
         logger.info(result)
         if (result) {
             res.status(200).send({

@@ -7,6 +7,7 @@ import Navbar from '@/components/Navbar'
 import Spinner from '@/components/svg/Spinner'
 import Arrow from '@/components/svg/Arrow'
 import userServerCall from '@/components/utils/userServerCall'
+import convertGithubUrlToRaw from '@/components/utils/convertDriveLinkToImageURL'
 import DisableSS from '../../../DisableSS';
 
 let page
@@ -27,11 +28,12 @@ const DoctorCard = ({ doctor, lockedChoice, setLockedChoice }) => {
             }
         }
     }
+
           
     return (
         <div className="card border border-gray-200 p-4 rounded-lg shadow-md" >
             <div className="image-container">
-                <img className="image" src={doctor.pfp} alt={doctor.name} width="120" height="120" loading="lazy" />
+                <img className="image" src={convertGithubUrlToRaw(doctor.pfp)} alt={doctor.name} width="120" height="120" loading="lazy" />
             </div>
             <div className="info-container">
                 <h3>{doctor.name}</h3>

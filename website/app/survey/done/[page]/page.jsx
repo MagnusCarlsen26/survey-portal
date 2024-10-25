@@ -12,7 +12,7 @@ import Spinner from '@/components/svg/Spinner'
 import DisableSS from '../../../DisableSS';
 
 function returnThankyou( currPage ) {
-    if ( currPage == 3 ) return 'thankyou'
+    if ( currPage == 4 ) return 'thankyou'
     else return currPage + 1
 }
 

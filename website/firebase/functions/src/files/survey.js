@@ -81,16 +81,6 @@ async function done({ uuid, form, page }) {
     try {
         if (!await checkPrevResponse({ uuid, page : 13, lookupTable : 'response' })) return "Please answer all the survey questions."
         if (!await checkPrevResponse({ uuid, page , lookupTable : 'done' })) return "Please answer all the post survey questions."
-
-        let result
-        Object.keys(form).forEach( key => {
-            if ( form[key] === "" ) {
-                result = "All questions are compulsory. Please attempt all the questions."
-                return
-            }
-        })
-        if (result) return result
-        if (Object.keys(form).length === 0) return "All questions are compulsory. Please attempt all the questions."
         if (!await checkIfExistResponse({ uuid, page, lookupTable : 'done' })) return "You have already attempted the question."
 
         await db.collection('done').add({
@@ -137,7 +127,7 @@ async function getPostSurveyQuestions({ uuid, page }) {
 async function surveyCompleted({ uuid }) {
     try {
         if (!await checkPrevResponse({ uuid, page : 13, lookupTable : 'response' })) return "Please answer all the survey questions."
-        if (!await checkPrevResponse({ uuid, page : 4 , lookupTable : 'done' })) return "Please answer all the post survey questions."
+        if (!await checkPrevResponse({ uuid, page : 5 , lookupTable : 'done' })) return "Please answer all the post survey questions."
 
         let docRef = db.collection('users').doc(uuid);
         docRef.update({
