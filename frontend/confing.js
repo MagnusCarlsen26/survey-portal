@@ -6,15 +6,14 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 // import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  "projectId": process.env.projectId,
-  "appId": process.env.appId,
-  "storageBucket": process.env.storageBucket,
-  "apiKey": process.env.apiKey,
-  "authDomain": process.env.authDomain,
-  "messagingSenderId": process.env.messagingSenderId
+  "projectId": process.env.NEXT_PUBLIC_projectId,
+  "appId": process.env.NEXT_PUBLIC_appId,
+  "storageBucket": process.env.NEXT_PUBLIC_storageBucket,
+  "apiKey": process.env.NEXT_PUBLIC_apiKey,
+  "authDomain": process.env.NEXT_PUBLIC_authDomain,
+  "messagingSenderId": process.env.NEXT_PUBLIC_messagingSenderId
 }
 
-console.log(firebaseConfig)
 // export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp()
 // export const auth = getAuth(app)
 // export const analytics = getAnalytics(app);

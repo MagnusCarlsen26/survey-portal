@@ -98,9 +98,43 @@ x. Custom Background image.
 11. Watch firebase/functions/src/config.
 6. Assumption that only 1 choice can be made.❌
 x. Firebase security rules
+x. Initialize admins.
+
+--- Automate ---
+1. Add above customizations.✔️
+2. find a way to inject .env and firebase configs
+3. automate creation of firebase.✔️
+4. automate creation of ec2 instance to deploy frontend.✔️
+
+--- Meet ---
+1. Transfer firebase account.
+2. 
+
+--- IMP COMMANDS ---
+gcloud functions add-invoker-policy-binding isAdminAccess       --region="us-central1"       --member="allUsers"
+
+
+
+--- todo --- 25 October 2024
+
+autofill email in postsurvey/1  -- doubt - shouldn''t trust client.
+remove compulsory and star in postsurvey ✔️
+postsurvey/2 multi select✔️
+postsurvey/3 first question in different page✔️
+Integrate github hosting✔️
+test that all 6 doctors come in one screen
+# added UI for adding instructions and post survey questions.
 
 
 Download Database - http://43.204.110.108:3000/downloadDB
 Website - https://survey-portal.vercel.app/login
 Admin - https://survey-portal.vercel.app/admin
-Login as dweepobotee@iitj.ac.in - localStorage.setItem("userUuid","iXP6i34xJ4bLAnLqWzPtovlmTtu2")
+Login as dweepobotee@iitj.ac.in - 
+localStorage.setItem("userUuid","iXP6i34xJ4bLAnLqWzPtovlmTtu2")
+
+1
+2
+25
+26
+49
+50

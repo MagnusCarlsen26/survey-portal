@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 
-import { auth, GoogleAuthProvider, signInWithPopup } from '@/../firebase/confing';
+import { auth, GoogleAuthProvider, signInWithPopup } from '@/confing';
 import { useRouter } from 'next/navigation';
 import React , { useState } from 'react'
 import Google from '@/components/svg/Google'
@@ -40,6 +40,8 @@ const Auth = () => {
             setErr(`Please use an ${process.env.NEXT_PUBLIC_EMAIL_DOMAIN} Email.`)
         }
     };
+
+    console.log(process.env.NEXT_PUBLIC_EMAIL_DOMAIN,'ff')
 
     return (
         <div 

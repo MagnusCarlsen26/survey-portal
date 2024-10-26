@@ -1,7 +1,7 @@
 "use client"
 
 import { httpsCallable } from 'firebase/functions';
-import { db,functions } from '@/../firebase/confing'
+import { db,functions } from '@/confing'
 import { useEffect, useState } from 'react';
 import { TiTick } from "react-icons/ti";
 import Navbar  from '@/components/Navbar'
