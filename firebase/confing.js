@@ -6,16 +6,15 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 // import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCZH3kOaXi69bj6vrXNQrns-K-Ny4PJDxY",
-  authDomain: "survey-portal-3b2b0.firebaseapp.com",
-  databaseURL: "https://survey-portal-3b2b0-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "survey-portal-3b2b0",
-  storageBucket: "survey-portal-3b2b0.appspot.com",
-  messagingSenderId: "387894139016",
-  appId: "1:387894139016:web:7e751979ab19354ea8e73d",
-  measurementId: "G-V9NLJB4C0T"
-};
+  "projectId": process.env.NEXT_PUBLIC_projectId,
+  "appId": process.env.NEXT_PUBLIC_appId,
+  "storageBucket": process.env.NEXT_PUBLIC_storageBucket,
+  "apiKey": process.env.NEXT_PUBLIC_apiKey,
+  "authDomain": process.env.NEXT_PUBLIC_authDomain,
+  "messagingSenderId": process.env.NEXT_PUBLIC_messagingSenderId
+}
 
+console.log(firebaseConfig)
 // export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp()
 // export const auth = getAuth(app)
 // export const analytics = getAnalytics(app);
