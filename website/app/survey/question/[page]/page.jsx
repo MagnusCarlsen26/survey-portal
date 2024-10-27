@@ -65,17 +65,7 @@ const Survey = ({ params }) => {
 
     const router = useRouter()
 
-    const [doctors,setDoctors] = useState( Array.from({ length: 6 }, () => 
-        [{
-        name: '',
-        specialty: '',
-        experience: '',
-        consultationFees: '',
-        distance: '',
-        rating: '',
-        ratingsCount: '',
-        image: ''
-    }]))
+    const [doctors,setDoctors] = useState()
     const [lockedChoice,setLockedChoice] = useState(false)
     const [loading,setLoading] = useState(true)
     const [time1,setTime1] = useState()
@@ -148,46 +138,42 @@ const Survey = ({ params }) => {
             <DisableSS />
 
             <br></br>
-            <div className="flex items-center justify-center px-12" style={{zIndex : "-1"}}>
-                {
-                    isAccess ?                 <div>
-                    <div className="flex">
-                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[0]} />
-                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[1]} />
-                    </div>
-                    <div className="flex">
-                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[2]} />
-                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[3]} />
-                    </div>
-                    <div className="flex">
-                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[4]} />
-                        <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[5]} />
-                    </div>
-                </div> : ( loading ? "Loading..." : "You don't have access to the survey." )
-                }
+            <div className="flex items-center justify-center">
+                <div className="grid grid-cols-2 rounded-lg ">
+                    {
+                        isAccess ?                 <>
+                            <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[0]} />
+                            <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[1]} />
+                            <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[2]} />
+                            <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[3]} />
+                            <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[4]} />
+                            <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[5]} />
+                    </> : ( loading ? "Loading..." : "You don't have access to the survey." )
+                    }
 
                 
-                {lockedChoice && 
-                    <div className='flex items-center justify-center'>
-                        <div>
-                            <div className='bg-white rounded-r-md py-2 border-l px-3'>
-                                <p>{lockedChoice?.doctorName}</p>
-                            </div>
-                            <button 
-                                type="button" 
-                                class="bg-green-600 text-white disabled: rounded-r-md py-2 border-l border-gray-200 hover:bg-green-800 hover:text-white px-3"
-                                onClick={() => submitResponse(lockedChoice.responseId)}
-                                disabled = { loading }
-                            >
-                            <div class="flex flex-row align-middle">
-                                <span class="mr-2 text-base">Next</span>
-                                { loading ? <Spinner /> : <Arrow /> }
+                    {lockedChoice && 
+                        <div className='flex items-center justify-center'>
+                            <div>
+                                <div className='bg-white rounded-r-md py-2 border-l px-3'>
+                                    <p>{lockedChoice?.doctorName}</p>
+                                </div>
+                                <button 
+                                    type="button" 
+                                    class="bg-green-600 text-white disabled: rounded-r-md py-2 border-l border-gray-200 hover:bg-green-800 hover:text-white px-3"
+                                    onClick={() => submitResponse(lockedChoice.responseId)}
+                                    disabled = { loading }
+                                >
+                                <div class="flex flex-row align-middle">
+                                    <span class="mr-2 text-base">Next</span>
+                                    { loading ? <Spinner /> : <Arrow /> }
 
+                                </div>
+                                </button>
                             </div>
-                            </button>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-function convertGithubUrlToRaw(githubUrl) {
+export default function convertGithubUrlToRaw(githubUrl) {
     if (githubUrl.includes('github.com') && githubUrl.includes('/blob/')) {
         let rawUrl = githubUrl.replace('github.com', 'raw.githubusercontent.com');
         rawUrl = rawUrl.replace('/blob/', '/');
