@@ -26,7 +26,7 @@ const Navbar = ({ heading }) => {
             <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
                     <OrgLogo />
-                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">MySwasthya</span>
+                    <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">MySwasthya</span>
                 </a>
                 
                 <p class="text-blue-300 text-center absolute inset-0 flex justify-center items-center text-xl">{ heading }</p>
