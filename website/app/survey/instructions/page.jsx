@@ -44,7 +44,7 @@ const Instructions = () =>{
                     {
                         instructions.map( (instruction,index) => (
                             <>
-                                <p key={index}>{index+1}. {instruction}</p>
+                                <p key={index}>{instruction}</p>
                                 <br/>
                             </>
                         ))

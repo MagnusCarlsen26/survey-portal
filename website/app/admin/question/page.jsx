@@ -4,6 +4,8 @@ import { db,functions } from '@/firebase/confing'
 import { httpsCallable } from 'firebase/functions';
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
+import convertDriveLinkToImageURL from '@/components/utils/convertDriveLinkToImageURL'
+
 function InputField({text,onChange,value}) {
     return (
         <div className="w-72 p-2">
@@ -19,7 +21,7 @@ function DoctorCard({ doctor, id, setCurrDoctor, doctors, setIsEdit }) {
     return (
         <div className="card">
             <div className="image-container">
-                <img className="image" src={doctor.pfp} alt={doctor.name} width="120" height="120" loading="lazy" />
+                <img className="image" src={convertDriveLinkToImageURL(doctor.pfp)} alt={doctor.name} width="120" height="120" loading="lazy" />
             </div>
             <div className="info-container">
                 <h3>{doctor.name}</h3>
@@ -111,20 +113,6 @@ const Question = () => {
         setUuid( localStorage.getItem('userUuid') )
     } , [])
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setCurrDoctor( prev => ({
-                ...prev,
-                pfp : reader.result
-            }))
-          };
-          reader.readAsDataURL(file);
-        }
-    };
-    
     return (
         <div
             className="bg-fixed w-full min-h-screen bg-cover"
@@ -155,8 +143,7 @@ const Question = () => {
                         <InputField value={currDoctor.experience} text={"Years of Experience"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, experience : text })} ) }}/>
                         <InputField value={currDoctor.consultationFees} text={"Consultation fees"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, consultationFees : text })} ) }}/>
                         <InputField value={currDoctor.rating} text={"Rating"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, rating : text })} ) }}/>                    
-                        <input type="file" accept="image/*" onChange={handleFileChange} />
-
+                        <InputField value={currDoctor.pfp} text={"pfp"} onChange={ (text) => { setCurrDoctor( prev => {return({ ...prev, pfp : text })} ) }}/>                    
                         <button 
                             onClick={saveDoctor}
                             type="button" 

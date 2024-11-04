@@ -150,9 +150,9 @@ const Survey = ({ params }) => {
                             <DoctorCard lockedChoice={lockedChoice} setLockedChoice={setLockedChoice} doctor={doctors[5]} />
                     </> : ( loading ? "Loading..." : "You don't have access to the survey." )
                     }
-
-                
-                    {lockedChoice && 
+                </div>
+                                
+                {lockedChoice && 
                         <div className='flex items-center justify-center'>
                             <div>
                                 <div className='bg-white rounded-r-md py-2 border-l px-3'>
@@ -160,20 +160,21 @@ const Survey = ({ params }) => {
                                 </div>
                                 <button 
                                     type="button" 
-                                    class="bg-green-600 text-white disabled: rounded-r-md py-2 border-l border-gray-200 hover:bg-green-800 hover:text-white px-3"
+                                    class="bg-green-600 text-white disabled: rounded-r-md py-2 border-l border-gray-200 hover:bg-green-800 hover:text-white px-3 w-full"
                                     onClick={() => submitResponse(lockedChoice.responseId)}
                                     disabled = { loading }
                                 >
-                                <div class="flex flex-row align-middle">
-                                    <span class="mr-2 text-base">Next</span>
+                                    <div class="flex justify-around">
+                                        <div className='flex'>
+                                        Next
                                     { loading ? <Spinner /> : <Arrow /> }
-
-                                </div>
+                                        </div>
+                                            
+                                    </div>
                                 </button>
                             </div>
                         </div>
                     }
-                </div>
             </div>
         </div>
     );
