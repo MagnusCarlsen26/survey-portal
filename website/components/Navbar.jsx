@@ -4,7 +4,7 @@ import OrgLogo from "@/components/svg/OrgLogo"
 import { useState, useEffect } from 'react';
 import userServerCall from "./utils/userServerCall";
 
-const Navbar = ({ heading }) => {
+const Navbar = () => {
 
     const [ userName,setUserName ] = useState("")
     
@@ -29,7 +29,7 @@ const Navbar = ({ heading }) => {
                     <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">MySwasthya</span>
                 </a>
                 
-                <p class="text-blue-300 text-center absolute inset-0 flex justify-center items-center text-xl">{ heading }</p>
+                <p class="text-blue-300 text-center absolute inset-0 flex justify-center items-center text-xl">Choose your doctor</p>
             
                 <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                     <p className='text-white'>{userName}</p>

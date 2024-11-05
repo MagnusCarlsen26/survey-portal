@@ -57,7 +57,7 @@ const DoctorCard = ({ doctor, lockedChoice, setLockedChoice }) => {
 }
 
 function routeToNextPage(router) {
-    if (parseInt(page,10) === 12) router.push('/survey/done/instructions')
+    if (parseInt(page,10) === 15) router.push('/survey/done/instructions')
     else router.push(`/survey/question/${parseInt(page,10) + 1}`)
 }
 

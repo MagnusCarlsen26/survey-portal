@@ -79,7 +79,7 @@ async function checkPrevResponse({ uuid,page,lookupTable }) {
 
 async function done({ uuid, form, page }) {
     try {
-        if (!await checkPrevResponse({ uuid, page : 13, lookupTable : 'response' })) return "Please answer all the survey questions."
+        if (!await checkPrevResponse({ uuid, page : 16, lookupTable : 'response' })) return "Please answer all the survey questions."
         if (!await checkPrevResponse({ uuid, page , lookupTable : 'done' })) return "Please answer all the post survey questions."
         if (!await checkIfExistResponse({ uuid, page, lookupTable : 'done' })) return "You have already attempted the question."
 
@@ -113,7 +113,7 @@ async function getUserName({ uuid }) {
 async function getPostSurveyQuestions({ uuid, page }) {
     try {
 
-        if (!await checkPrevResponse({ uuid, page : 13, lookupTable : 'response' })) return "Please answer all the survey questions."
+        if (!await checkPrevResponse({ uuid, page : 16, lookupTable : 'response' })) return "Please answer all the survey questions."
         if (!await checkPrevResponse({ uuid, page , lookupTable : 'done' })) return "Please answer all the post survey questions."
         
         const question =  await db.collection('postSurveyQuestions').doc(page).get()
@@ -126,7 +126,7 @@ async function getPostSurveyQuestions({ uuid, page }) {
 
 async function surveyCompleted({ uuid }) {
     try {
-        if (!await checkPrevResponse({ uuid, page : 13, lookupTable : 'response' })) return "Please answer all the survey questions."
+        if (!await checkPrevResponse({ uuid, page : 16, lookupTable : 'response' })) return "Please answer all the survey questions."
         if (!await checkPrevResponse({ uuid, page : 4 , lookupTable : 'done' })) return "Please answer all the post survey questions."
 
         let docRef = db.collection('users').doc(uuid);
@@ -149,7 +149,7 @@ async function getInstructions({ uuid, level }) {
         const instructions =  await db.collection('instructions').doc('survey').get()
         return instructions.data()
     } else if (level === 'postSurvey') {
-        if (!await checkPrevResponse({ uuid, page : 13, lookupTable : 'response' })) return "Please answer all the survey questions."
+        if (!await checkPrevResponse({ uuid, page : 16, lookupTable : 'response' })) return "Please answer all the survey questions."
         const instructions =  await db.collection('instructions').doc('postSurvey').get()
         return instructions.data()
     } else {
