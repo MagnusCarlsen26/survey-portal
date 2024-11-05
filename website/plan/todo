@@ -82,7 +82,20 @@
 82. basic meta tag.✔️
 83. Modified minInstances to 1.✔️
 
-Download Database - http://43.204.110.108:3000/downloadDB
+node:test
+Module build failed: UnhandledSchemeError: Reading from "node:test" is not handled by plugins (Unhandled scheme).
+Webpack supports "data:" and "file:" URIs by default.
+You may need an additional plugin to handle "node:" URIs.--- Testing --- 5 Nov 2024
+
+1. stop navigating from /survey/instructions to /survey/questions/1 if the user doesn''t have access.
+2. Deny Photo not working from portal.✔️ it was working
+3. survey/done/2 should be conditionally shown.
+4. start experiment ✔️
+5. start survey ✔️
+6.  The following 12 sets of 6 doctors ✔️
+
+
+
+Download Database - 
 Website - https://survey-portal.vercel.app/login
 Admin - https://survey-portal.vercel.app/admin
-Login as dweepobotee@iitj.ac.in - localStorage.setItem("userUuid","iXP6i34xJ4bLAnLqWzPtovlmTtu2")
