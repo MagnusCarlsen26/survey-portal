@@ -35,6 +35,9 @@ const Auth = () => {
 
             const user = result.user;
             localStorage.setItem("userUuid",user.uid)
+            
+            await new Promise(resolve => setTimeout(resolve, 5000))
+
             router.push('/survey/instructions')
         } catch (error) {
             setErr("Please use an IITJ Email.")

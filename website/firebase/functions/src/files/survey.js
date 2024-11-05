@@ -127,7 +127,7 @@ async function getPostSurveyQuestions({ uuid, page }) {
 async function surveyCompleted({ uuid }) {
     try {
         if (!await checkPrevResponse({ uuid, page : 13, lookupTable : 'response' })) return "Please answer all the survey questions."
-        if (!await checkPrevResponse({ uuid, page : 5 , lookupTable : 'done' })) return "Please answer all the post survey questions."
+        if (!await checkPrevResponse({ uuid, page : 4 , lookupTable : 'done' })) return "Please answer all the post survey questions."
 
         let docRef = db.collection('users').doc(uuid);
         docRef.update({

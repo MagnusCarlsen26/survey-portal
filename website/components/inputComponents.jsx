@@ -19,9 +19,9 @@ export function InputField({text, onChange, type}) {
     )
 }
 
-export function CheckboxGroup({ heading, options, onChange }) {
+export function CheckboxGroup({ heading, options, onChange, visiblity }) {
     return (
-        <>
+        <div className={visiblity}>
             <p className='font-bold'>{heading}</p>
             {
                 options.map(option => (
@@ -49,7 +49,7 @@ export function CheckboxGroup({ heading, options, onChange }) {
                     </div>
                 ))
             }
-        </>
+        </div>
     )
 }
 

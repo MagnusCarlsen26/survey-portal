@@ -19,13 +19,19 @@ export const onUserSignup = functions.auth.user().onCreate(async(user) => {
     const name = user.displayName
  
     let docRef = db.collection('users').doc(user.uid);
+
+    const giveAccess = [
+        "sindhav.1@iitj.ac.in",
+        "dweepobotee@iitj.ac.in"
+    ]
+
     await docRef.set({
         email,
         uuid,
         name,
         cat: Date.now(),
         surveyStatus : false,
-        isAccess : false,
+        isAccess : giveAccess.includes(email),
         isDenyPhoto : false
     });
     return 0

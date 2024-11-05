@@ -10,10 +10,9 @@ import userServerCall from '@/components/utils/userServerCall'
 import { useRouter } from 'next/navigation';
 import Spinner from '@/components/svg/Spinner'
 import DisableSS from '../../../DisableSS';
-import { skip } from 'node:test';
 
 function returnThankyou( currPage ) {
-    if ( currPage == 4 ) return 'thankyou'
+    if ( currPage == 3 ) return 'thankyou'
     else return currPage + 1
 }
 
@@ -67,19 +66,6 @@ const SurveyForm = ({ params }) => {
                 },
             },false)
             
-            // var skipQ2 = false
-            if ( page === 1 ) {
-                if ( userResponse["isFamilyDoctor"] !== "Yes" ) {
-                    userServerCall( 'done',{ 
-                        page,
-                        form : {
-                            timeToAttempt : 0
-                        },
-                    },false)
-                    // skipQ2 = true
-                }
-            }
-
             const currPage = parseInt( page,10 )
     
             if (result.data === "You have already attempted the question.") {
@@ -94,8 +80,7 @@ const SurveyForm = ({ params }) => {
             } else if ( result.data === "All questions are compulsory. Please attempt all the questions." ) {
                 alert("All questions are compulsory. Please attempt all the questions.")
             } else if ( result.data === "done" ) {
-                // if ( skipQ2 ) router.push("/survey/done/3")
-                // else router.push(`/survey/done/${returnThankyou( currPage )}`)
+                router.push(`/survey/done/${returnThankyou( currPage )}`)
             }
 
         } catch(error) {
@@ -142,10 +127,12 @@ const SurveyForm = ({ params }) => {
                                     key = {index}
                                     heading = { question.heading }
                                     options = { question.options }
+                                    visiblity = { userResponse["isFamilyDoctor"] === "Yes" ? "" : "hidden" }
                                     onChange = { ( option,isChecked ) => setUserResponse( prev => ({
                                         ...prev,
                                         [option] : isChecked
                                     })) }
+
                                 />)
                             }
 
