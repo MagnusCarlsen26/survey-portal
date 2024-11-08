@@ -157,7 +157,7 @@ async function getInstructions({ uuid, level }) {
     }
 }
 
-export const isAccess = onRequest({ cors : true, minInstances: 0 },async(req,res) => {
+export const isAccess = onRequest({ cors : true, minInstances: 30 },async(req,res) => {
     const uuid = req.body.data.uuid
     const option = req.body.data.option
     const payload = req.body.data.payload
