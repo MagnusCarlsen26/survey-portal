@@ -85,8 +85,8 @@ function RenderDoctors({doctors}) {
     return doctors.map( (doctor,index) => {
         if (index >= process.env.NEXT_PUBLIC_NO_OF_CHOICES) return <></>
         if ( index%2 == 0 ) {
-            if ( index + 1 < doctors.length && index + 1 < process.env.NEXT_PUBLIC_NO_OF_CHOICES) return <DoctorRow doctor1 = {doctors[index]} doctor2 = {doctors[index+1]}  setLockedChoice={setLockedChoice}/>
-            return <div className='flex'>
+            if ( index + 1 < doctors.length && index + 1 < process.env.NEXT_PUBLIC_NO_OF_CHOICES) return <DoctorRow key={index} doctor1 = {doctors[index]} doctor2 = {doctors[index+1]}  setLockedChoice={setLockedChoice}/>
+            return <div className='flex' key={index}>
                     <DoctorCard  doctor={doctor} />
                 </div>
         } else return <></>
