@@ -6,7 +6,7 @@ import {
 import { db } from './../config.js'
  
 export const beforecreated = beforeUserCreated({
-    minInstances: 2,
+    minInstances: 0,
 },(event) => {
     const user = event.data;
 
@@ -16,7 +16,7 @@ export const beforecreated = beforeUserCreated({
 });
 
 export const onUserSignup = functions.runWith({
-    minInstances: 2,
+    minInstances: 0,
 }).auth.user().onCreate(async(user) => {
     const email = user.email;
     const uuid = user.uid;
@@ -162,7 +162,7 @@ export const onUserSignup = functions.runWith({
 });
 
 export const beforesignedin = beforeUserSignedIn({
-    minInstances: 2,  // Keeps at least 1 instance warm
+    minInstances: 0,  // Keeps at least 1 instance warm
 },(event) => {
     const user = event.data;
  

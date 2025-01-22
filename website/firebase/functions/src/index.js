@@ -2,7 +2,6 @@ import {onRequest} from "firebase-functions/v2/https";
 import { beforecreated, onUserSignup, beforesignedin } from './files/auth.js'
 import { isAccess } from './files/survey.js'
 import { isAdminAccess } from "./files/admin.js";
-import { downloadData } from "./files/download.js";
 
 async function downloadDb(req, res) {
     const url = 'http://13.233.122.134:3000/downloadDb';
@@ -31,7 +30,7 @@ async function downloadDb(req, res) {
 }
 
 export const helloWorld = onRequest({cors : true},async(req, res) => {
-    await downloadData(req,res)
+    await downloadDb(req,res)
 });
 
-export { beforecreated, onUserSignup, beforesignedin, isAccess, isAdminAccess, downloadData }
+export { beforecreated, onUserSignup, beforesignedin, isAccess, isAdminAccess, downloadDb }
